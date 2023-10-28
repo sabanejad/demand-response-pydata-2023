@@ -23,7 +23,7 @@
   \item Introduce the Trial and the Dataset
   \item Mathematical Model
   \item Data Prep, Cleaning, Processing
-  \item Results
+  \item Results, Lessons Learned, Conclusion
   \end{itemize}
 \end{frame}
 
@@ -66,9 +66,9 @@
 \begin{frame}{Other Challenges with Causal Inference}
   \begin{itemize}
     \item<+-> It's difficult to estimate the treatment effect for a unit. \\
-    \indent As a result, analyses are done on a \textbf{population vs a unit}.
+    \indent $\implies$ analyses are done on a \textbf{population vs a unit}.
     \item<+-> When estimating treatment effect for populations, to remove bias terms, we want samples that behave similarly out of sample. \\
-    \indent As a result, analyses are done on \textbf{random samples} of populations.
+    \indent $\implies$ analyses are done on \textbf{random samples} of populations.
   \end{itemize}
 \end{frame}
 
@@ -78,9 +78,9 @@
   \begin{itemize}
     \item<+-> Motivation: The Climate Change Act of 2008 sets the target of reducing carbon emissions to 20\% of 1990 levels by 2050.
     \item<+-> ``Dynamic": Prices were given a day ahead via the Smart Meter In Home Display or text message.
-    \vspace{0.4cm}
+    \vspace{0.3cm}
     \centering
-    \includegraphics[width=0.9\textwidth]{images/day-ahead-pricing.png}
+    \includegraphics[width=0.87\textwidth]{images/day-ahead-pricing.png}
   \end{itemize}
 \end{frame}
 
@@ -144,6 +144,75 @@
 \end{frame}
 
 \section{The Math}
+
+\begin{frame}
+  \begin{itemize}
+    \item <+->
+\end{frame}
+
+
+\section{The Analysis}
+
+\begin{frame}
+  Assume matrix $\alpha^{t \times n_c}$ contains control group data, and $\beta^{t \times n_t}$ contains treatment group data. Where $t = 365 \times 48 = 17520$, $n_c$ is the number of households in the control group and $n_t$ is the number of households in the treatment group.
+  \begin{align}
+    \begin{split}
+      \overline{\beta^m_{2012}} &= a \times \overline{\alpha^m_{2012}} + b \\
+      \overline{\hat{\beta}^m_{2013}} &= a \times \overline{\alpha^m_{2013}} + b \\
+      \overline{\Delta\mbox{treatment}} &= \overline{\beta^m_{2013}} - \overline{\hat{\beta}^m_{2013}}
+    \end{split}
+  \end{align}
+\end{frame}
+
+\begin{frame}{Data Prep, Cleaning, Processing}
+  \includegraphics[width=0.95\textwidth]{images/lcl-raw-files.png}
+\end{frame}
+
+\begin{frame}{Data Prep, Cleaning, Processing}
+  \centering
+  \includegraphics[width=1\textwidth]{images/avg-cost-per-day.png}
+\end{frame}
+
+\begin{frame}{Data Prep, Cleaning, Processing}
+  \centering
+  \includegraphics[width=1.1\textwidth]{images/dow-socio.png}
+\end{frame}
+
+\section{The Conclusion}
+
+\begin{frame}{Lessons Learned}
+  \begin{enumerate}
+    \item<+-> KYD: know your data: learn how it was collected, its biases, shortcomings, feature space, problem space.
+    \item<+-> Before diving into fitting a model to your data, it's important to base your analysis on some mathematical model
+    % TODO: ADD IMAGE
+    \centering
+    \includegraphics[width=1\textwidth]{images/dow-socio.png}
+    \item<+-> Before diving into the data, it's important to base your analysis on some mathematical model
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{What Did We Learn?}
+  \begin{itemize}
+    \item<+-> A little bit about electricity markets
+    \item<+-> Causal Analysis
+    \item<+-> How to break down your data to match the mathematical model at hand
+    \item<+-> Questions to ask before analysis:
+    \begin{itemize}
+      \item<+-> How was the data collected? 
+      \item<+-> What biases are present?
+      \item<+-> How does that impact your analysis and results?
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Thank You}
+  \begin{itemize}
+  \item \url{https://github.com/sabanejad}
+  \item \url{https://www.linkedin.com/in/sabanejad/}
+  \end{itemize}
+\end{frame}
+
+\section{Appendix}
 
 \begin{frame}{The Fundamental Problem of Causal Inference (FPCI)}
   \begin{itemize}
@@ -264,57 +333,6 @@
 
 % The first term on the right-hand side of this equation is the true, causal effect of the cholesterol treatment on those who take it (the ATT). The second term is the potential bias that
 
-\section{The Analysis}
-
-\begin{frame}
-  Assume matrix $\alpha^{t \times n_c}$ contains control group data, and $\beta^{t \times n_t}$ contains treatment group data. Where $t = 365 \times 48 = 17520$, $n_c$ is the number of households in the control group and $n_t$ is the number of households in the treatment group.
-  \begin{align}
-    \begin{split}
-      \overline{\beta^m_{2012}} &= a \times \overline{\alpha^m_{2012}} + b \\
-      \overline{\hat{\beta}^m_{2013}} &= a \times \overline{\alpha^m_{2013}} + b \\
-      \overline{\Delta\mbox{treatment}} &= \overline{\beta^m_{2013}} - \overline{\hat{\beta}^m_{2013}}
-    \end{split}
-  \end{align}
-\end{frame}
-
-\begin{frame}{Data Prep, Cleaning, Processing}
-  \includegraphics[width=0.95\textwidth]{images/lcl-raw-files.png}
-\end{frame}
-
-\begin{frame}{Data Prep, Cleaning, Processing}
-  \centering
-  \includegraphics[width=1\textwidth]{images/avg-cost-per-day.png}
-\end{frame}
-
-\begin{frame}{Data Prep, Cleaning, Processing}
-  \centering
-  \includegraphics[width=1.1\textwidth]{images/dow-socio.png}
-\end{frame}
-
-\section{The Conclusion}
-
-\begin{frame}{What Did We Learn?}
-  \begin{itemize}
-    \item<+-> A little bit about electricity markets
-    \item<+-> Causal Analysis
-    \item<+-> How to break down your data to match the mathematical model at hand
-    \item<+-> Questions to ask before analysis:
-    \begin{itemize}
-      \item<+-> How was the data collected? 
-      \item<+-> What biases are present?
-      \item<+-> How does that impact your analysis and results?
-    \end{itemize}
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Thank You}
-  \begin{itemize}
-  \item \url{https://github.com/sabanejad}
-  \item \url{https://www.linkedin.com/in/sabanejad/}
-  \end{itemize}
-\end{frame}
-
-\section{Appendix}
 
 \begin{frame}{Potential Outcomes Framework (Rubin-Neyman Causal Model)}
   Each household $x_i$ has two potential outcomes:
