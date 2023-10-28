@@ -8,10 +8,9 @@
 
 \title{How to Use Python and Mathematical Modeling to Better Understand the Impact of Electricity Pricing on Consumption}
 
-% \date{November 2, 2023}
-\date{\today}
+\date{November 2, 2023}
 \author{Saba Nejad}
-% \institute{PyData NYC 2023}
+\institute{PyData NYC 2023}
 
 \begin{document}
 \maketitle
@@ -32,8 +31,9 @@
 
 \begin{frame}{The Power Grid}
   \begin{itemize}
-    \item<+-> Electricity is unique in that its \textbf{storage is prohibitively costly}. As a result, \textbf{supply must at least meet demand} at all times. 
-    \item<+-> (Regional / Independent) \textbf{System Operators}: Resposible for reliable delivery of electricity to consumers.
+    \item<+-> Electricity is unique in that its \textbf{storage is prohibitively costly} $\implies$ \textbf{supply must at least meet demand} at all times. 
+    \item<+-> \textbf{System Operators}: Resposible for reliable delivery of electricity to consumers.
+    \vspace{0.2cm}
     \begin{center}
       \includegraphics[width=0.65\textwidth]{images/iso-control-room.png}
     \end{center}
@@ -41,16 +41,35 @@
 \end{frame}
 
 \begin{frame}{Demand Response}
+  (Dynamic) Time of Use Pricing (dToU):
   \begin{itemize}
-    \item (Dynamic) Time of Use Pricing (dToU)
-    \begin{itemize}
-      \item Assumption 1: Demand can be shifted around.
-      \item Assumption 2: Players are price sensitive ie there's correlation between demand and price.
-    \end{itemize}
+    \item Assumption 1: Demand can be shifted around.
+    \item Assumption 2: Consumers are price sensitive i.e. there's correlation between demand and price. Causation?
   \end{itemize}
-  \vspace{0.5cm}
+  \vspace{0.2cm}
   \centering
   \includegraphics[width=0.85\textwidth]{images/demand-response.png}
+\end{frame}
+
+\begin{frame}{The Fundamental Problem of Causal Inference (FPCI)}
+  \begin{itemize}
+    \item<+-> Assume $X \in\{0,1\}$ is a binary causal variable and $Y$ is a response variable.
+    \item<+-> Assume $X$ has a causal effect on $Y$.
+    \begin{itemize}
+      \item $Y_0$ := the value of $Y$ for $X=0$ (untreated unit)
+      \item $Y_1$ := the value of $Y$ for $X=1$ (treated unit)
+    \end{itemize}
+    \item<+-> $Y_0$ and $Y_1$ are \textbf{counterfactuals} of one another. We observe $Y_1$ or $Y_0$ but not both at the same time.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Other Challenges with Causal Inference}
+  \begin{itemize}
+    \item<+-> It's difficult to estimate the treatment effect for a unit. \\
+    \indent As a result, analyses are done on a \textbf{population vs a unit}.
+    \item<+-> When estimating treatment effect for populations, to remove bias terms, we want samples that behave similarly out of sample. \\
+    \indent As a result, analyses are done on \textbf{random samples} of populations.
+  \end{itemize}
 \end{frame}
 
 \section{The Data}
@@ -58,15 +77,26 @@
 \begin{frame}{Low Carbon London Smart Meter Trial}
   \begin{itemize}
     \item<+-> Motivation: The Climate Change Act of 2008 sets the target of reducing carbon emissions to 20\% of 1990 levels by 2050.
-    \item<+-> The tariff prices were given a day ahead via the Smart Meter In Home Display or text message.
-    \item<+-> Data spans November 2011 and February 2014 (around 167M records); Treatment took place for the calendar year 2013 only.
+    \item<+-> ``Dynamic": Prices were given a day ahead via the Smart Meter In Home Display or text message.
+    \vspace{0.4cm}
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/day-ahead-pricing.png}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Low Carbon London Smart Meter Trial}
+  \begin{itemize}
+    \item<+-> Data spans November 2011 and February 2014 (around 167M records)
+    \item<+-> Treatment took place in the calendar year 2013
     \item<+-> Readings were taken at half hourly intervals; discrete socio-economic feature per household included in the data.
     \item<+-> dTou price bands vs static pricing model:
     \begin{table}[]
+      \vspace{0.2cm}
+      \centering
       \begin{tabular}{|l|l|}
         \hline
         dToU Pricing Model & Static Pricing Model \\ \hline
-        High (67.20 p/kWh) & 14.228 pence/kWh \\ \hline
+        High (67.20 p/kWh) & 14.228 p/kWh \\ \hline
         Normal (11.76 p/kWh) & 14.228 p/kWh \\ \hline
         Low (3.99 p/kWh) & 14.228 p/kWh \\ \hline
       \end{tabular}
@@ -74,8 +104,17 @@
   \end{itemize}
 \end{frame}
 
+
 \begin{frame}{Low Carbon London Smart Meter Trial: Biases?}
-  \textbf{The trial is double opt-in}: Households opt into sharing their data with the trial at all, And they opt into the dToU pricing model + certain incentives:
+  \textbf{The trial is double opt-in}:
+  \begin{enumerate}
+    \item Households opt into sharing their data with the trial at all.
+    \item Some opted into the treatment group: subject to the dToU pricing model in 2013.
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Low Carbon London Smart Meter Trial: Biases?}
+  The treatment group was given some incentives: 
   \begin{itemize}
     \item A guarantee that they will be reimbursed at the end of trial if they are worse off on the dToU tariff than they would have been on their previous tariff.
     \item Assurances regarding how many hours would be charged at the high price band.
@@ -119,6 +158,7 @@
     \end{itemize}
   \end{itemize}
 \end{frame}
+
 
 \begin{frame}{The Fundamental Problem of Causal Inference (FPCI)}
   \begin{itemize}
@@ -242,11 +282,13 @@
 \end{frame}
 
 \begin{frame}{Data Prep, Cleaning, Processing}
-  \includegraphics[width=0.95\textwidth]{images/avg-cost-per-day.png}
+  \centering
+  \includegraphics[width=1\textwidth]{images/avg-cost-per-day.png}
 \end{frame}
 
 \begin{frame}{Data Prep, Cleaning, Processing}
-  \includegraphics[width=0.95\textwidth]{images/dow-socio.png}
+  \centering
+  \includegraphics[width=1.1\textwidth]{images/dow-socio.png}
 \end{frame}
 
 \section{The Conclusion}
