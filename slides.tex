@@ -15,15 +15,13 @@
 \begin{document}
 \maketitle
 
-\section{Outline}
-
 \begin{frame}{Overview of the Talk}
   \begin{itemize}
-  \item Introduce the Problem Space; Define Terminology
-  \item Introduce the Trial and the Dataset
-  \item Mathematical Model
-  \item Data Prep, Cleaning, Processing
-  \item Results, Lessons Learned, Conclusion
+  \item<+-> Introduce the Problem Space; Define Terminology
+  \item<+-> Introduce the Trial and the Dataset
+  \item<+-> Mathematical Model
+  \item<+-> Data Prep, Cleaning, Processing
+  \item<+-> Results, Takeaways, Conclusion
   \end{itemize}
 \end{frame}
 
@@ -43,24 +41,20 @@
 \begin{frame}{Demand Response}
   (Dynamic) Time of Use Pricing (dToU):
   \begin{itemize}
-    \item Assumption 1: Demand can be shifted around.
-    \item Assumption 2: Consumers are price sensitive i.e. there's correlation between demand and price. Causation?
+    \item<+-> Assumption 1: Demand can be shifted around.
+    \item<+-> Assumption 2: Consumers are price sensitive i.e. there's correlation between demand and price. Causation?
+    \item[]<+->
+    \vspace{0.2cm}
+    \centering
+    \includegraphics[width=0.85\textwidth]{images/demand-response.png}
   \end{itemize}
-  \vspace{0.2cm}
-  \centering
-  \includegraphics[width=0.85\textwidth]{images/demand-response.png}
 \end{frame}
 
-\begin{frame}{The Fundamental Problem of Causal Inference (FPCI)}
-  \begin{itemize}
-    \item<+-> Assume $X \in\{0,1\}$ is a binary causal variable and $Y$ is a response variable.
-    \item<+-> Assume $X$ has a causal effect on $Y$.
-    \begin{itemize}
-      \item $Y_0$ := the value of $Y$ for $X=0$ (untreated unit)
-      \item $Y_1$ := the value of $Y$ for $X=1$ (treated unit)
-    \end{itemize}
-    \item<+-> $Y_0$ and $Y_1$ are \textbf{counterfactuals} of one another. We observe $Y_1$ or $Y_0$ but not both at the same time.
-  \end{itemize}
+\begin{frame}{Causal Inference}
+  What is causal inference and treatment effect in laymen terms; what is a treatment.
+  rethink ordering of the next few slides
+  % \begin{itemize}
+  % \end{itemize}
 \end{frame}
 
 \begin{frame}{Other Challenges with Causal Inference}
@@ -70,6 +64,35 @@
     \item<+-> When estimating treatment effect for populations, to remove bias terms, we want samples that behave similarly out of sample. \\
     \indent $\implies$ analyses are done on \textbf{random samples} of populations.
   \end{itemize}
+\end{frame}
+
+\begin{frame}{The Fundamental Problem of Causal Inference (FPCI)}
+  \begin{itemize}
+    \item<+-> Assume $X \in\{0,1\}$ is a binary causal variable and $Y$ is a response variable (which may be continuous).
+    \item<+-> Assume $X$ has a causal effect on $Y$.
+    \begin{itemize}
+      \item $Y_0$ := the value of $Y$ for $X=0$ % (untreated unit)
+      \item $Y_1$ := the value of $Y$ for $X=1$ % (treated unit)
+      \item $T = Y_1 - Y_0$ := the treatment effect
+    \end{itemize}
+    \item<+-> $Y_0$ and $Y_1$ are \textbf{counterfactuals} of one another. We observe \textbf{only} $Y_1$ or $Y_0$, but not both at the same time.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Solutions Around FPCI}
+  \begin{enumerate}
+    \item<+-> Temporal Stability \& Causal Transience
+    \item<+-> Unit Homogeneity
+    \item<+-> Estimate causal effects for populations rather than units 
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Solutions Around FPCI for this Trial}
+  \begin{enumerate}
+    \item Temporal Stability \& Causal Transience {\color{red}{X}}
+    \item Unit Homogeneity {\color{red}{X}}
+    \item Estimate causal effects for populations rather than units {\color{green}{\checkmark}}
+  \end{enumerate}
 \end{frame}
 
 \section{The Data}
@@ -88,8 +111,8 @@
 \begin{frame}{Low Carbon London Smart Meter Trial}
   \begin{itemize}
     \item<+-> Data spans November 2011 and February 2014 (around 167M records)
-    \item<+-> Treatment took place in the calendar year 2013
-    \item<+-> Readings were taken at half hourly intervals; discrete socio-economic feature per household included in the data.
+    \item<+-> Treatment took place in the calendar year 2013.
+    \item<+-> Readings were taken at half hourly intervals.
     \item<+-> dTou price bands vs static pricing model:
     \begin{table}[]
       \vspace{0.2cm}
@@ -105,12 +128,16 @@
   \end{itemize}
 \end{frame}
 
+\begin{frame}{Additional Features: Discrete Socio-Economic Categories}
+  discrete socio-economic feature per household included in the data
+\end{frame}
+
 
 \begin{frame}{Low Carbon London Smart Meter Trial: Biases?}
   \textbf{The trial is double opt-in}:
   \begin{enumerate}
-    \item Households opt into sharing their data with the trial at all.
-    \item Some opted into the treatment group: subject to the dToU pricing model in 2013.
+    \item<+-> Households opt into sharing their data with the trial at all.
+    \item<+-> Some opted into the treatment group: subject to the dToU pricing model in 2013.
   \end{enumerate}
 \end{frame}
 
@@ -138,7 +165,7 @@
   \begin{itemize}
     \item 2012: Users were still onboarding.
     \item 2013: Some users dropped out of both the treatment and the control groups
-    \item 5,567 total households participated: 4,500 were in the control group, 1,100 were in the treatment group.
+    \item \texttildelow5,600 total households participated: \texttildelow4,500 were in the control group, \texttildelow1,100 were in the treatment group.
   \end{itemize}
   \vspace{-0.5cm}
   \includegraphics[width=1\textwidth]{images/house-count.png}
@@ -154,42 +181,6 @@
       \item<+-> those households are flexible time-wise: particular jobs, hours, etc.
     \end{itemize}
   \end{itemize}
-\end{frame}
-
-\begin{frame}{Treatment vs Control Group Baselines}
-  \centering
-  \includegraphics[width=1\textwidth]{images/avg-consumption-per-day-baseline.png}
-  $\implies$ the two groups don't have the same baseline electricity consumption patterns.
-\end{frame}
-
-\begin{frame}{Changes from Time: 2012 vs 2013}
-  \centering
-  \includegraphics[width=1\textwidth]{images/yoy-changes-control-group.png}
-\end{frame}
-
-\begin{frame}{Treatment vs Control Group Baselines}
-  $$
-  \begin{aligned}
-    & f_{2012}\left(\theta_{t r}, T, t\right) \quad \stackrel{h(t)}{\longrightarrow} \quad f_{2013}^*\left(\theta_{t r}, T, t\right) \\
-    & g\left(\theta_c\right) \uparrow \quad \quad \quad \quad \quad \quad g\left(\theta_c\right) \uparrow \\
-    & f_{2012}\left(\theta_c, T, t\right) \quad \stackrel{h(t)}{\longrightarrow} \quad f_{2013}\left(\theta_c, T, t\right) \\
-    &
-  \end{aligned}
-  $$
-\end{frame}
-
-\begin{frame}{Treatment vs Control Group Baselines}
-  \centering
-  \includegraphics[width=0.8\textwidth]{images/group-mapping.png}
-\end{frame}
-
-\begin{frame}{Treatment vs Control Group Baselines}
-  \centering
-  \includegraphics[width=0.8\textwidth]{images/yoy-mapping.png}
-\end{frame}
-
-\begin{frame}{Treatment Effective?}
-  If we look at percent change without normalizing the baselines the treatment was effective.
 \end{frame}
 
 \section{The Math}
@@ -228,12 +219,60 @@
   \end{align}
 \end{frame}
 
+\begin{frame}{Dimenstionality Analysis}
+  Here?
+\end{frame}
+
+\begin{frame}{Naive Model}
+  If we didn't know about all these biases, we \textit{could} use control group in 2013 as the counterfactual estimate for treatment group in 2013.
+  \begin{align}
+    \begin{split}
+      \hat\beta_{2013} & \approx \alpha_{2013} \\
+      T & = \beta_{2013} - \hat\beta_{2013} \\
+        & = \beta_{2013} - \alpha_{2013}
+    \end{split}
+  \end{align}
+\end{frame}
+
+\begin{frame}{Treatment vs Control Group Baselines}
+  \centering
+  \includegraphics[width=1\textwidth]{images/avg-consumption-per-day-baseline.png}
+  $\implies$ the two groups don't have the same baseline electricity consumption patterns.
+\end{frame}
+
+\begin{frame}{Sophisticated Naive Model}
+  now use treatment last year
+\end{frame}
+
+\begin{frame}{Changes from Time: 2012 vs 2013}
+  \centering
+  \includegraphics[width=1\textwidth]{images/yoy-changes-control-group.png}
+\end{frame}
+
+\begin{frame}{Treatment vs Control Group Baselines}
+  \centering
+  \includegraphics[width=0.8\textwidth]{images/group-mapping.png}
+\end{frame}
+
+\begin{frame}{Treatment vs Control Group Baselines}
+  \centering
+  \includegraphics[width=0.8\textwidth]{images/yoy-mapping.png}
+\end{frame}
+
+\begin{frame}{Treatment Effective?}
+  If we look at percent change without normalizing the baselines the treatment was effective.
+\end{frame}
+
 \begin{frame}{Other Clustering?}
   I used different clustering methods to cluster houses in this data set based on the control group’s consumption pre-intervention: k-means clustering, PCA3, TSNE4. I also tried clustering on the frequency responses which I found fast Fourier trans- form. PCA, TSNE, and Agglomerative clustering on the resulting data set was also inconclusive. This is reason for sticking to the pre-existing socio-economic clusters.
 \end{frame}
 
 
 \section{The Analysis}
+
+\begin{frame}{Data Prep, Cleaning, Processing}
+  \includegraphics[width=0.95\textwidth]{images/lcl-raw-files.png}
+\end{frame}
 
 \begin{frame}
   Assume matrix $\alpha^{t \times n_c}$ contains control group data, and $\beta^{t \times n_t}$ contains treatment group data. Where $t = 365 \times 48 = 17520$, $n_c$ is the number of households in the control group and $n_t$ is the number of households in the treatment group.
@@ -246,31 +285,12 @@
   \end{align}
 \end{frame}
 
-\begin{frame}{Data Prep, Cleaning, Processing}
-  \includegraphics[width=0.95\textwidth]{images/lcl-raw-files.png}
-\end{frame}
-
-\begin{frame}{Data Prep, Cleaning, Processing}
-
-\end{frame}
-
-\begin{frame}{Data Prep, Cleaning, Processing}
+\begin{frame}{Socio DoW Analysis}
   \centering
   \includegraphics[width=1.1\textwidth]{images/dow-socio.png}
 \end{frame}
 
 \section{The Conclusion}
-
-\begin{frame}{Lessons Learned}
-  \begin{itemize}
-    \item<+-> KYD: know your data: learn how it was collected, its biases, shortcomings, feature space, problem space.
-    \item<+-> Before diving into fitting a model to your data, it's important to base your analysis on some mathematical model
-    \vspace{1cm}
-    \begin{center}
-    \includegraphics[width=0.8\textwidth]{images/reality-model-data.png}
-    \end{center}
-  \end{itemize}
-\end{frame}
 
 \begin{frame}{What Did We Learn?}
   \begin{itemize}
@@ -286,6 +306,17 @@
   \end{itemize}
 \end{frame}
 
+\begin{frame}{Takeaways}
+  \begin{itemize}
+    \item<+-> KYD: know your data: learn how it was collected, its biases, shortcomings, feature space, problem space.
+    \item<+-> Before diving into fitting a model to your data, it's important to base your analysis on some mathematical model
+    \vspace{1cm}
+    \begin{center}
+    \includegraphics[width=0.8\textwidth]{images/reality-model-data.png}
+    \end{center}
+  \end{itemize}
+\end{frame}
+
 \begin{frame}{Thank You}
   \begin{itemize}
   \item \url{https://github.com/sabanejad}
@@ -294,6 +325,17 @@
 \end{frame}
 
 % \section{Appendix}
+
+% \begin{frame}{Treatment vs Control Group Baselines}
+%   $$
+%   \begin{aligned}
+%     & f_{2012}\left(\theta_{t r}, T, t\right) \quad \stackrel{h(t)}{\longrightarrow} \quad f_{2013}^*\left(\theta_{t r}, T, t\right) \\
+%     & g\left(\theta_c\right) \uparrow \quad \quad \quad \quad \quad \quad g\left(\theta_c\right) \uparrow \\
+%     & f_{2012}\left(\theta_c, T, t\right) \quad \stackrel{h(t)}{\longrightarrow} \quad f_{2013}\left(\theta_c, T, t\right) \\
+%     &
+%   \end{aligned}
+%   $$
+% \end{frame}
 
 % \begin{frame}{The Fundamental Problem of Causal Inference (FPCI)}
 %   \begin{itemize}
@@ -321,22 +363,6 @@
 %     $$
 %     That is, we observe $Y_1$ or $Y_0$ but not both.
 %   \end{itemize}
-% \end{frame}
-
-% \begin{frame}{Solutions Around FPCI}
-%   \begin{enumerate}
-%     \item<+-> Temporal Stability \& Causal Transience
-%     \item<+-> Unit Homogeneity
-%     \item<+-> Analyze Populations Instead of Units
-%   \end{enumerate}
-% \end{frame}
-
-% \begin{frame}{Solutions Around FPCI for this Trial}
-%   \begin{enumerate}
-%     \item Temporal Stability \& Causal Transience {\color{red}{X}}
-%     \item Unit Homogeneity {\color{red}{X}}
-%     \item Estimate causal effects for populations rather than units {\color{green}{\checkmark}}
-%   \end{enumerate}
 % \end{frame}
 
 % \begin{frame}{Estimate Causal Effects for Populations Rather than Units}
