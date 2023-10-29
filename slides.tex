@@ -143,11 +143,82 @@
   \includegraphics[width=1\textwidth]{images/house-count.png}
 \end{frame}
 
+\begin{frame}{Treatment vs Control Group Baselines}
+  \begin{itemize}
+    \item<+-> Though our groups are \textbf{geographically and socio-economically balanced}, one group opted into dToU pricing and was offered some incentives.
+    \item<+-> What are some reasons the baselines might differ given what we know?
+    \begin{itemize}
+      \item<+-> price sensitive group opted in
+      \item<+-> low consuming group opted in
+      \item<+-> those households are flexible time-wise: particular jobs, hours, etc.
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Treatment vs Control Group Baselines}
+  \centering
+  \includegraphics[width=1\textwidth]{images/avg-consumption-per-day-baseline.png}
+  $\implies$ the two groups don't have the same baseline electricity consumption patterns.
+\end{frame}
+
+\begin{frame}{Treatment vs Control Group Baselines}
+  $$
+  \begin{aligned}
+    & f_{2012}\left(\theta_{t r}, T, t\right) \quad \stackrel{h(t)}{\longrightarrow} \quad f_{2013}^*\left(\theta_{t r}, T, t\right) \\
+    & g\left(\theta_c\right) \uparrow \quad \quad \quad \quad \quad \quad g\left(\theta_c\right) \uparrow \\
+    & f_{2012}\left(\theta_c, T, t\right) \quad \stackrel{h(t)}{\longrightarrow} \quad f_{2013}\left(\theta_c, T, t\right) \\
+    &
+  \end{aligned}
+  $$
+\end{frame}
+
+\begin{frame}{Treatment vs Control Group Baselines}
+  \centering
+  \includegraphics[width=0.8\textwidth]{images/group-mapping.png}
+\end{frame}
+
+\begin{frame}{Treatment Effective?}
+  If we look at percent change without normalizing the baselines the treatment was effective.
+\end{frame}
+
 \section{The Math}
 
-\begin{frame}
+\begin{frame}{Mathematical Model}
+  Consider the following segmentation of the data.
   \begin{itemize}
-    \item <+->
+    \item $\alpha_y$ := control group's consumption matrix during year $y$
+    \item $\beta_y$ := treatment group's consumption matrix during year $y$
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Mathematical Model}
+  \begin{table}[h!]
+  \centering
+    \begin{tabular}{|p{3cm}|p{3.5cm}|p{3.5cm}|}
+        \hline
+        Year & Control Group & Treatment Group \\
+        \hline
+        2011 & $\alpha_{2011}$ & $\beta_{2011}$ \\
+        2012 & $\alpha_{2012}$ & $\beta_{2012}$ \\
+        2013 & $\alpha_{2013}$ & $\beta_{2013}$* \\
+        2014 & $\alpha_{2014}$ & $\beta_{2014}$ \\
+        \hline
+    \end{tabular}
+  \end{table}
+\end{frame}
+
+\begin{frame}{Mathematical Model}
+  \begin{align}
+    \begin{split}
+        \alpha_{2012} X &= \beta_{2012} \\
+        \alpha_{2013} X &= \hat\beta_{2013} \\
+        \Delta\mbox{treatment} &= \beta_{2013} - \hat\beta_{2013}
+    \end{split}
+  \end{align}
+\end{frame}
+
+\begin{frame}{Other Clustering?}
+  I used different clustering methods to cluster houses in this data set based on the control group’s consumption pre-intervention: k-means clustering, PCA3, TSNE4. I also tried clustering on the frequency responses which I found fast Fourier trans- form. PCA, TSNE, and Agglomerative clustering on the resulting data set was also inconclusive. This is reason for sticking to the pre-existing socio-economic clusters.
 \end{frame}
 
 
@@ -169,8 +240,7 @@
 \end{frame}
 
 \begin{frame}{Data Prep, Cleaning, Processing}
-  \centering
-  \includegraphics[width=1\textwidth]{images/avg-cost-per-day.png}
+
 \end{frame}
 
 \begin{frame}{Data Prep, Cleaning, Processing}
@@ -184,18 +254,17 @@
   \begin{enumerate}
     \item<+-> KYD: know your data: learn how it was collected, its biases, shortcomings, feature space, problem space.
     \item<+-> Before diving into fitting a model to your data, it's important to base your analysis on some mathematical model
-    % TODO: ADD IMAGE
     \centering
-    \includegraphics[width=1\textwidth]{images/dow-socio.png}
+    \includegraphics[width=0.4\textwidth]{images/reality-model-data.png}
     \item<+-> Before diving into the data, it's important to base your analysis on some mathematical model
   \end{enumerate}
 \end{frame}
 
 \begin{frame}{What Did We Learn?}
   \begin{itemize}
-    \item<+-> A little bit about electricity markets
-    \item<+-> Causal Analysis
-    \item<+-> How to break down your data to match the mathematical model at hand
+    \item<+-> A little bit about electricity markets?
+    \item<+-> Causal analysis.
+    \item<+-> How to break down your data to match the mathematical model at hand.
     \item<+-> Questions to ask before analysis:
     \begin{itemize}
       \item<+-> How was the data collected? 
@@ -212,164 +281,164 @@
   \end{itemize}
 \end{frame}
 
-\section{Appendix}
+% \section{Appendix}
 
-\begin{frame}{The Fundamental Problem of Causal Inference (FPCI)}
-  \begin{itemize}
-    \item<+-> Assume $X \in\{0,1\}$ is a binary causal variable and $Y$ is a response variable (which may be continuous).
-    \item<+-> Assume $X$ has a causal effect on $Y$, this implies that the value of $Y$ we observe depends on the value of $X$.
-    \item<+-> We can define $Y_0$ and $Y_1$ as the values that $Y$ would take if $X$ were equal to 0 and 1 respectively.
-    \item<+-> $Y_0$ and $Y_1$ are counterfactuals of one another. Both can never be observed at the same time.
-    \begin{itemize}
-      \item $Y_i$ := the outcome of interest for unit $i$
-      \item $Y_0$ := the value of $Y_i$ for $X=0$ (untreated unit)
-      \item $Y_1$ := the value of $Y_i$ for $X=1$ (treated unit)
-    \end{itemize}
-  \end{itemize}
-\end{frame}
-
-
-\begin{frame}{The Fundamental Problem of Causal Inference (FPCI)}
-  \begin{itemize}
-    \item<+-> Assume that units are all alike, so $Y_{0 i} \equiv Y_0$ and $Y_{1 i} \equiv Y_1$.
-    \item<+-> The causal effect of $X_i$ on $Y_i$ is $T=Y_1-Y_0$, where $T$ stands for Treatment Effect.
-    \item<+-> \textit{But what's the issue here?}
-    \item<+-> We never observe $Y_1-Y_0$ for a single unit $i$. Instead, we observe
-    $$
-    Y_i=Y_{1 i} X_i+Y_{0 i}\left(1-X_i\right)
-    $$
-    That is, we observe $Y_1$ or $Y_0$ but not both.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Solutions Around FPCI}
-  \begin{enumerate}
-    \item<+-> Temporal Stability \& Causal Transience
-    \item<+-> Unit Homogeneity
-    \item<+-> Analyze Populations Instead of Units
-  \end{enumerate}
-\end{frame}
-
-\begin{frame}{Solutions Around FPCI for this Trial}
-  \begin{enumerate}
-    \item Temporal Stability \& Causal Transience {\color{red}{X}}
-    \item Unit Homogeneity {\color{red}{X}}
-    \item Estimate causal effects for populations rather than units {\color{green}{\checkmark}}
-  \end{enumerate}
-\end{frame}
-
-\begin{frame}{Estimate Causal Effects for Populations Rather than Units}
-  \begin{itemize}
-    \item<+-> Causal Effect for Unit $i$: $T_i=Y_{1 i}-Y_{0 i}$
-    \begin{itemize}
-      \item \textit{We can't estimate this. Why?}
-    \end{itemize}
-    \item<+-> Average Treatment Effect for the Treated (ATT): $T^*=E\left[Y_1-Y_0 \mid X=1\right]$
-    \item<+-> Average Treatment Effect (ATE): $T^{\dagger}=E\left[Y_1-Y_0\right]$
-    \item<+-> \textit{ATE is treatment effect assuming entire population is treated.}
-      \begin{itemize}
-        \item \textit{What's an example?}
-        \item \textit{Which of the two is more important? But how do we estimate it?}
-      \end{itemize}
-  \end{itemize}
-\end{frame}
+% \begin{frame}{The Fundamental Problem of Causal Inference (FPCI)}
+%   \begin{itemize}
+%     \item<+-> Assume $X \in\{0,1\}$ is a binary causal variable and $Y$ is a response variable (which may be continuous).
+%     \item<+-> Assume $X$ has a causal effect on $Y$, this implies that the value of $Y$ we observe depends on the value of $X$.
+%     \item<+-> We can define $Y_0$ and $Y_1$ as the values that $Y$ would take if $X$ were equal to 0 and 1 respectively.
+%     \item<+-> $Y_0$ and $Y_1$ are counterfactuals of one another. Both can never be observed at the same time.
+%     \begin{itemize}
+%       \item $Y_i$ := the outcome of interest for unit $i$
+%       \item $Y_0$ := the value of $Y_i$ for $X=0$ (untreated unit)
+%       \item $Y_1$ := the value of $Y_i$ for $X=1$ (treated unit)
+%     \end{itemize}
+%   \end{itemize}
+% \end{frame}
 
 
-\begin{frame}{Estimate Causal Effects for Populations Rather than Units}
-  To make things more complicated, let's make another estimator.
-  \begin{enumerate}
-    \item<+-> $\tilde{T}=E[Y \mid X=1]-$ $E[Y \mid X=0]$
-  \end{enumerate}
-  Is $\tilde{T}$ a good estimator of $T^*$? What is it estimating?
-  What change can we make to our population to make this a good estimator?
-\end{frame}
+% \begin{frame}{The Fundamental Problem of Causal Inference (FPCI)}
+%   \begin{itemize}
+%     \item<+-> Assume that units are all alike, so $Y_{0 i} \equiv Y_0$ and $Y_{1 i} \equiv Y_1$.
+%     \item<+-> The causal effect of $X_i$ on $Y_i$ is $T=Y_1-Y_0$, where $T$ stands for Treatment Effect.
+%     \item<+-> \textit{But what's the issue here?}
+%     \item<+-> We never observe $Y_1-Y_0$ for a single unit $i$. Instead, we observe
+%     $$
+%     Y_i=Y_{1 i} X_i+Y_{0 i}\left(1-X_i\right)
+%     $$
+%     That is, we observe $Y_1$ or $Y_0$ but not both.
+%   \end{itemize}
+% \end{frame}
 
-\begin{frame}{Estimate Causal Effects for Populations Rather than Units}
-  \begin{itemize}
-    \item<+-> Assume your treatment and control group had the same expected baseline behavior, and the same counterfactual expected behavior.
-    $$
-    \begin{aligned}
-    & E\left[Y_1 \mid X=1\right]=E\left[Y_1 \mid X=0\right] \\
-    & E\left[Y_0 \mid X=1\right]=E\left[Y_0 \mid X=0\right]
-    \end{aligned}
-    $$
-    \item<+-> Let's revisit $$ \begin{aligned}
-      T^* & = E\left[Y_1 \mid X=1\right]-E\left[Y_0 \mid X=1\right] \\
-          & = E\left[Y_1 \mid X=1\right]-E\left[Y_0 \mid X=0\right] 
-    \end{aligned} $$
-  \end{itemize}
-\end{frame}
+% \begin{frame}{Solutions Around FPCI}
+%   \begin{enumerate}
+%     \item<+-> Temporal Stability \& Causal Transience
+%     \item<+-> Unit Homogeneity
+%     \item<+-> Analyze Populations Instead of Units
+%   \end{enumerate}
+% \end{frame}
 
-\begin{frame}{Estimate Causal Effects for Populations Rather than Units}
-  \begin{itemize}
-    \item<+-> but what if they aren't exactly the same, this would often hold in the case of an actual treatment. In other words there's a reason for the treatment:
-    \item<+-> $$
-    \begin{aligned}
-    & E\left[Y_1 \mid X=1\right]>E\left[Y_1 \mid X=0\right] \\
-    & E\left[Y_0 \mid X=1\right]>E\left[Y_0 \mid X=0\right] .
-    \end{aligned}
-    $$
-    \item<+-> ... let's bring back $\tilde{T}$. 
-  \end{itemize}
-\end{frame}
+% \begin{frame}{Solutions Around FPCI for this Trial}
+%   \begin{enumerate}
+%     \item Temporal Stability \& Causal Transience {\color{red}{X}}
+%     \item Unit Homogeneity {\color{red}{X}}
+%     \item Estimate causal effects for populations rather than units {\color{green}{\checkmark}}
+%   \end{enumerate}
+% \end{frame}
 
-\begin{frame}{Estimate Causal Effects for Populations Rather than Units}
-  So, if we calculated the contrast $\tilde{T}=E[Y \mid X=1]-E[Y \mid X=0]$ for this unbalanced group, what would we get?
-  $$
-  \begin{aligned}
-  E\left[Y_1 \mid X=1\right]-E\left[Y_0 \mid X=0\right] & =\underbrace{E\left[Y_1 \mid X=1\right]-E\left[Y_0 \mid X=1\right]}_{T^*} \\
-  & +\underbrace{\left\{E\left[Y_0 \mid X=1\right]-E\left[Y_0 \mid X=0\right]\right\}}_{\text {Bias }} .
-  \end{aligned}
-  $$
-  (Go to whiteboard and do the rest)
-\end{frame}
-
-% Notice that our substitution above of $E\left[Y_0 \mid X=1\right]$ for $E\left[Y_0 \mid X=0\right]$ is justified by the assumption of treatment-control balance in equation (1). If the subjects who didn't receive the treatment are just like those who did but for not having received the treatment, then the contrast between the treated and untreated groups provides an unbiased estimate of the causal effect of the treatment on the treated group (ATT).
-% - Returning to our invalid estimator $\tilde{T}$, let's ask how likely is it that the counterfactual outcomes would be balanced among a set of people selected from the population according to whether or not they are currently receiving the treatment. It does not take a great leap of logic to hypothesize that the patients receiving the cholesterol drug are more likely to be suffering from high cholesterol than those who are not taking the drug. This would imply that:
+% \begin{frame}{Estimate Causal Effects for Populations Rather than Units}
+%   \begin{itemize}
+%     \item<+-> Causal Effect for Unit $i$: $T_i=Y_{1 i}-Y_{0 i}$
+%     \begin{itemize}
+%       \item \textit{We can't estimate this. Why?}
+%     \end{itemize}
+%     \item<+-> Average Treatment Effect for the Treated (ATT): $T^*=E\left[Y_1-Y_0 \mid X=1\right]$
+%     \item<+-> Average Treatment Effect (ATE): $T^{\dagger}=E\left[Y_1-Y_0\right]$
+%     \item<+-> \textit{ATE is treatment effect assuming entire population is treated.}
+%       \begin{itemize}
+%         \item \textit{What's an example?}
+%         \item \textit{Which of the two is more important? But how do we estimate it?}
+%       \end{itemize}
+%   \end{itemize}
+% \end{frame}
 
 
-% In words, patients receiving the drug are more likely to suffer from high cholesterol whether or not they are receiving the drug (presumably, they are receiving the drug specifically because they were diagnosed with high cholesterol).
+% \begin{frame}{Estimate Causal Effects for Populations Rather than Units}
+%   To make things more complicated, let's make another estimator.
+%   \begin{enumerate}
+%     \item<+-> $\tilde{T}=E[Y \mid X=1]-$ $E[Y \mid X=0]$
+%   \end{enumerate}
+%   Is $\tilde{T}$ a good estimator of $T^*$? What is it estimating?
+%   What change can we make to our population to make this a good estimator?
+% \end{frame}
+
+% \begin{frame}{Estimate Causal Effects for Populations Rather than Units}
+%   \begin{itemize}
+%     \item<+-> Assume your treatment and control group had the same expected baseline behavior, and the same counterfactual expected behavior.
+%     $$
+%     \begin{aligned}
+%     & E\left[Y_1 \mid X=1\right]=E\left[Y_1 \mid X=0\right] \\
+%     & E\left[Y_0 \mid X=1\right]=E\left[Y_0 \mid X=0\right]
+%     \end{aligned}
+%     $$
+%     \item<+-> Let's revisit $$ \begin{aligned}
+%       T^* & = E\left[Y_1 \mid X=1\right]-E\left[Y_0 \mid X=1\right] \\
+%           & = E\left[Y_1 \mid X=1\right]-E\left[Y_0 \mid X=0\right] 
+%     \end{aligned} $$
+%   \end{itemize}
+% \end{frame}
+
+% \begin{frame}{Estimate Causal Effects for Populations Rather than Units}
+%   \begin{itemize}
+%     \item<+-> but what if they aren't exactly the same, this would often hold in the case of an actual treatment. In other words there's a reason for the treatment:
+%     \item<+-> $$
+%     \begin{aligned}
+%     & E\left[Y_1 \mid X=1\right]>E\left[Y_1 \mid X=0\right] \\
+%     & E\left[Y_0 \mid X=1\right]>E\left[Y_0 \mid X=0\right] .
+%     \end{aligned}
+%     $$
+%     \item<+-> ... let's bring back $\tilde{T}$. 
+%   \end{itemize}
+% \end{frame}
+
+% \begin{frame}{Estimate Causal Effects for Populations Rather than Units}
+%   So, if we calculated the contrast $\tilde{T}=E[Y \mid X=1]-E[Y \mid X=0]$ for this unbalanced group, what would we get?
+%   $$
+%   \begin{aligned}
+%   E\left[Y_1 \mid X=1\right]-E\left[Y_0 \mid X=0\right] & =\underbrace{E\left[Y_1 \mid X=1\right]-E\left[Y_0 \mid X=1\right]}_{T^*} \\
+%   & +\underbrace{\left\{E\left[Y_0 \mid X=1\right]-E\left[Y_0 \mid X=0\right]\right\}}_{\text {Bias }} .
+%   \end{aligned}
+%   $$
+%   (Go to whiteboard and do the rest)
+% \end{frame}
+
+% % Notice that our substitution above of $E\left[Y_0 \mid X=1\right]$ for $E\left[Y_0 \mid X=0\right]$ is justified by the assumption of treatment-control balance in equation (1). If the subjects who didn't receive the treatment are just like those who did but for not having received the treatment, then the contrast between the treated and untreated groups provides an unbiased estimate of the causal effect of the treatment on the treated group (ATT).
+% % - Returning to our invalid estimator $\tilde{T}$, let's ask how likely is it that the counterfactual outcomes would be balanced among a set of people selected from the population according to whether or not they are currently receiving the treatment. It does not take a great leap of logic to hypothesize that the patients receiving the cholesterol drug are more likely to be suffering from high cholesterol than those who are not taking the drug. This would imply that:
 
 
-% The first term on the right-hand side of this equation is the true, causal effect of the cholesterol treatment on those who take it (the ATT). The second term is the potential bias that
+% % In words, patients receiving the drug are more likely to suffer from high cholesterol whether or not they are receiving the drug (presumably, they are receiving the drug specifically because they were diagnosed with high cholesterol).
 
 
-\begin{frame}{Potential Outcomes Framework (Rubin-Neyman Causal Model)}
-  Each household $x_i$ has two potential outcomes:
-  \begin{itemize}
-    \item $Y_0\left(x_i\right)$ is the potential outcome had the unit not been treated (static pricing model): ``control outcome"
-    \item $Y_1\left(x_i\right)$ is the potential outcome had the unit been treated (dToU pricing model): ``treated outcome"
-  \end{itemize}
-  - Conditional average treatment effect for unit $i$ :
-  $$
-  \operatorname{CATE}\left(x_i\right)=\mathbb{E}_{Y_1 \sim p\left(Y_1 \mid x_i\right)}\left[Y_1 \mid x_i\right]-\mathbb{E}_{Y_0 \sim p\left(Y_0 \mid x_i\right)}\left[Y_0 \mid x_i\right]
-  $$
-  - Average Treatment Effect:
-  $$
-  A T E:=\mathbb{E}\left[Y_1-Y_0\right]=\mathbb{E}_{x \sim p(x)}[\operatorname{CATE}(x)]
-  $$
-\end{frame}
+% % The first term on the right-hand side of this equation is the true, causal effect of the cholesterol treatment on those who take it (the ATT). The second term is the potential bias that
 
-\begin{frame}{Mathematical Model}
-\begin{itemize}
-  \item Fundamental Problem of Causal Inference: Both outcomes can't be observed for the same household $x_i$.
-  \begin{itemize}
-    \item Observed factual outcome:
-    $$
-    y_i=t_i Y_1\left(x_i\right)+\left(1-t_i\right) Y_0\left(x_i\right)
-    $$
-    \item Unobserved counterfactual outcome:
-    $$
-    y_i^{C F}=\left(1-t_i\right) Y_1\left(x_i\right)+t_i Y_0\left(x_i\right)
-    $$
-  \end{itemize}
-  \item Solution? Approximate the counterfactual eg close enough to random sample: minimum wage problem, NJ and east PA, Card \& Krueger, 1994.
-\end{itemize}
-\end{frame}
 
-\begin{frame}
-  David Card minimum wage paper: \url{https://davidcard.berkeley.edu/papers/njmin-aer.pdf}
-  LCL Experiment \url{https://data.london.gov.uk/dataset/smartmeter-energy-use-data-in-london-households}
-\end{frame}
+% \begin{frame}{Potential Outcomes Framework (Rubin-Neyman Causal Model)}
+%   Each household $x_i$ has two potential outcomes:
+%   \begin{itemize}
+%     \item $Y_0\left(x_i\right)$ is the potential outcome had the unit not been treated (static pricing model): ``control outcome"
+%     \item $Y_1\left(x_i\right)$ is the potential outcome had the unit been treated (dToU pricing model): ``treated outcome"
+%   \end{itemize}
+%   - Conditional average treatment effect for unit $i$ :
+%   $$
+%   \operatorname{CATE}\left(x_i\right)=\mathbb{E}_{Y_1 \sim p\left(Y_1 \mid x_i\right)}\left[Y_1 \mid x_i\right]-\mathbb{E}_{Y_0 \sim p\left(Y_0 \mid x_i\right)}\left[Y_0 \mid x_i\right]
+%   $$
+%   - Average Treatment Effect:
+%   $$
+%   A T E:=\mathbb{E}\left[Y_1-Y_0\right]=\mathbb{E}_{x \sim p(x)}[\operatorname{CATE}(x)]
+%   $$
+% \end{frame}
+
+% \begin{frame}{Mathematical Model}
+% \begin{itemize}
+%   \item Fundamental Problem of Causal Inference: Both outcomes can't be observed for the same household $x_i$.
+%   \begin{itemize}
+%     \item Observed factual outcome:
+%     $$
+%     y_i=t_i Y_1\left(x_i\right)+\left(1-t_i\right) Y_0\left(x_i\right)
+%     $$
+%     \item Unobserved counterfactual outcome:
+%     $$
+%     y_i^{C F}=\left(1-t_i\right) Y_1\left(x_i\right)+t_i Y_0\left(x_i\right)
+%     $$
+%   \end{itemize}
+%   \item Solution? Approximate the counterfactual eg close enough to random sample: minimum wage problem, NJ and east PA, Card \& Krueger, 1994.
+% \end{itemize}
+% \end{frame}
+
+% \begin{frame}
+%   David Card minimum wage paper: \url{https://davidcard.berkeley.edu/papers/njmin-aer.pdf}
+%   LCL Experiment \url{https://data.london.gov.uk/dataset/smartmeter-energy-use-data-in-london-households}
+% \end{frame}
 
 \end{document}
