@@ -1,6 +1,5 @@
 \documentclass{beamer}
 
-% Use metropolis theme
 \usetheme[progressbar=frametitle]{metropolis}
 \usepackage{minted}
 \usepackage{subfig}
@@ -51,10 +50,10 @@
 \end{frame}
 
 \begin{frame}{Causal Inference}
-  What is causal inference and treatment effect in laymen terms; what is a treatment.
-  rethink ordering of the next few slides
-  % \begin{itemize}
-  % \end{itemize}
+  % TODO: What is causal inference and treatment effect in laymen terms; what is a treatment.
+  % rethink ordering of the next few slides
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/headache-treatment-effect.png}
 \end{frame}
 
 \begin{frame}{Other Challenges with Causal Inference}
@@ -71,8 +70,8 @@
     \item<+-> Assume $X \in\{0,1\}$ is a binary causal variable and $Y$ is a response variable (which may be continuous).
     \item<+-> Assume $X$ has a causal effect on $Y$.
     \begin{itemize}
-      \item $Y_0$ := the value of $Y$ for $X=0$ % (untreated unit)
-      \item $Y_1$ := the value of $Y$ for $X=1$ % (treated unit)
+      \item $Y_0$ := the value of $Y$ when $X=0$ (untreated unit)
+      \item $Y_1$ := the value of $Y$ when $X=1$ (treated unit)
       \item $T = Y_1 - Y_0$ := the treatment effect
     \end{itemize}
     \item<+-> $Y_0$ and $Y_1$ are \textbf{counterfactuals} of one another. We observe \textbf{only} $Y_1$ or $Y_0$, but not both at the same time.
@@ -110,7 +109,7 @@
 
 \begin{frame}{Low Carbon London Smart Meter Trial}
   \begin{itemize}
-    \item<+-> Data spans November 2011 and February 2014 (around 167M records)
+    \item<+-> Data spans November 2011 and February 2014 (around 167M records).
     \item<+-> Treatment took place in the calendar year 2013.
     \item<+-> Readings were taken at half hourly intervals.
     \item<+-> dTou price bands vs static pricing model:
@@ -131,7 +130,6 @@
 \begin{frame}{Additional Features: Discrete Socio-Economic Categories}
   discrete socio-economic feature per household included in the data
 \end{frame}
-
 
 \begin{frame}{Low Carbon London Smart Meter Trial: Biases?}
   \textbf{The trial is double opt-in}:
@@ -155,7 +153,7 @@
 \begin{frame}{Low Carbon London Smart Meter Trial: Distribution?}
   \begin{figure}
     \centering
-    \subfloat[\centering Trial household sample locations overlaid on the borough boundary map of Greater London. Map data from the Greater London Authority. This shows that the treatment and control group were representative samples of Greater London.]{\includegraphics[width=5cm]{images/london-geo-breakdown.png}}
+    \subfloat[\centering Trial household sample locations overlaid on the borough boundary map of Greater London. This shows that the treatment and control group were representative samples of Greater London.]{\includegraphics[width=5cm]{images/london-geo-breakdown.png}}
     \qquad
     \subfloat[\centering The treatment and control groups were also representative socio-economic samples of Greater London.]{\includegraphics[width=5cm]{images/london-socio-breakdown.png}}
   \end{figure}
@@ -167,7 +165,7 @@
     \item 2013: Some users dropped out of both the treatment and the control groups
     \item \texttildelow5,600 total households participated: \texttildelow4,500 were in the control group, \texttildelow1,100 were in the treatment group.
   \end{itemize}
-  \vspace{-0.5cm}
+  \vspace{-0.25cm}
   \includegraphics[width=1\textwidth]{images/house-count.png}
 \end{frame}
 
@@ -193,6 +191,38 @@
   \end{itemize}
 \end{frame}
 
+\begin{frame}{Dimenstionality Analysis: Control Group Matrices}
+  $$
+  \alpha_y = \left[\begin{array}{cccc}
+  a_{11} & a_{12} & \cdots & a_{1 n_c} \\
+  a_{21} & a_{22} & \cdots & a_{2 n_c} \\
+  \vdots & \vdots & \ddots & \vdots \\
+  a_{t 1} & a_{t 2} & \cdots & a_{t n_c}
+  \end{array}\right]
+  $$
+  \begin{itemize}
+  \item[]<+-> $\alpha$ matrics are of size $\alpha_{t \times n_c}$.
+  \item[]<+-> $t$ is the number of half-hour measurements in a year ($t = 365 \times 48 = 17520$ for 2012 and 2013).
+  \item[]<+-> $n_c$ is the number of households in the control group. 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Dimenstionality Analysis: Treatment Group Matrices}
+  $$
+  \beta_y = \left[\begin{array}{cccc}
+  b_{11} & b_{12} & \cdots & b_{1 n_t} \\
+  b_{21} & b_{22} & \cdots & b_{2 n_t} \\
+  \vdots & \vdots & \ddots & \vdots \\
+  b_{t 1} & b_{t 2} & \cdots & b_{t n_t}
+  \end{array}\right]
+  $$
+  \begin{itemize}
+  \item[]<+-> $\beta$ matrics are of size $\alpha_{t \times n_t}$.
+  \item[]<+-> $t$ is the number of half-hour measurements in a year ($t = 365 \times 48 = 17520$ for 2012 and 2013).
+  \item[]<+-> $n_t$ is the number of households in the treatment group. 
+  \end{itemize}
+\end{frame}
+
 \begin{frame}{Mathematical Model}
   \begin{table}[h!]
   \centering
@@ -202,25 +232,16 @@
         \hline
         2011 & $\alpha_{2011}$ & $\beta_{2011}$ \\
         2012 & $\alpha_{2012}$ & $\beta_{2012}$ \\
-        2013 & $\alpha_{2013}$ & $\beta_{2013}$* \\
+        2013 & $\alpha_{2013}$ & $\hat\beta_{2013}$ \\
         2014 & $\alpha_{2014}$ & $\beta_{2014}$ \\
         \hline
     \end{tabular}
   \end{table}
-\end{frame}
-
-\begin{frame}{Mathematical Model}
-  \begin{align}
-    \begin{split}
-        \alpha_{2012} X &= \beta_{2012} \\
-        \alpha_{2013} X &= \hat\beta_{2013} \\
-        \Delta\mbox{treatment} &= \beta_{2013} - \hat\beta_{2013}
-    \end{split}
-  \end{align}
-\end{frame}
-
-\begin{frame}{Dimenstionality Analysis}
-  Here?
+  \begin{itemize}
+    \item[]<+-> $\hat\beta_{2013}$ is the counterfactual consumption for $\beta_{2013}$.
+    \item[]<+-> $T = \hat\beta_{2013} - \beta_{2013}$ is the treatment effect.
+    \item[]<+-> Goal is to \textbf{find a good estimate} for $\hat\beta_{2013}$.
+  \end{itemize}
 \end{frame}
 
 \begin{frame}{Naive Model}
@@ -241,12 +262,20 @@
 \end{frame}
 
 \begin{frame}{Sophisticated Naive Model}
-  now use treatment last year
+  Let's instead use treatment group in 2012 as the counterfactual estimate for treatment group in 2013.
+  \begin{align}
+    \begin{split}
+      \hat\beta_{2013} & \approx \beta_{2012} \\
+      T & = \beta_{2013} - \hat\beta_{2013} \\
+        & = \beta_{2013} - \beta_{2012}
+    \end{split}
+  \end{align}
 \end{frame}
 
 \begin{frame}{Changes from Time: 2012 vs 2013}
   \centering
   \includegraphics[width=1\textwidth]{images/yoy-changes-control-group.png}
+  $\implies$ Things changed between the two years even for the control group.
 \end{frame}
 
 \begin{frame}{Treatment vs Control Group Baselines}
@@ -259,19 +288,28 @@
   \includegraphics[width=0.8\textwidth]{images/yoy-mapping.png}
 \end{frame}
 
+\begin{frame}{Mathematical Model: Using Group Mapping}
+  \begin{align}
+    \begin{split}
+        \alpha_{2012} X &= \beta_{2012} \\
+        \alpha_{2013} X &= \hat\beta_{2013} \\
+        \Delta\mbox{treatment} &= \beta_{2013} - \hat\beta_{2013}
+    \end{split}
+  \end{align}
+\end{frame}
+
+\section{The Analysis}
+
+\begin{frame}{Data Prep, Cleaning, Processing}
+  \includegraphics[width=0.95\textwidth]{images/lcl-raw-files.png}
+\end{frame}
+
 \begin{frame}{Treatment Effective?}
   If we look at percent change without normalizing the baselines the treatment was effective.
 \end{frame}
 
 \begin{frame}{Other Clustering?}
   I used different clustering methods to cluster houses in this data set based on the control group’s consumption pre-intervention: k-means clustering, PCA3, TSNE4. I also tried clustering on the frequency responses which I found fast Fourier trans- form. PCA, TSNE, and Agglomerative clustering on the resulting data set was also inconclusive. This is reason for sticking to the pre-existing socio-economic clusters.
-\end{frame}
-
-
-\section{The Analysis}
-
-\begin{frame}{Data Prep, Cleaning, Processing}
-  \includegraphics[width=0.95\textwidth]{images/lcl-raw-files.png}
 \end{frame}
 
 \begin{frame}
@@ -283,11 +321,6 @@
       \overline{\Delta\mbox{treatment}} &= \overline{\beta^m_{2013}} - \overline{\hat{\beta}^m_{2013}}
     \end{split}
   \end{align}
-\end{frame}
-
-\begin{frame}{Socio DoW Analysis}
-  \centering
-  \includegraphics[width=1.1\textwidth]{images/dow-socio.png}
 \end{frame}
 
 \section{The Conclusion}
@@ -326,6 +359,11 @@
 
 % \section{Appendix}
 
+% \begin{frame}{Socio DoW Analysis}
+%   \centering
+%   \includegraphics[width=1.1\textwidth]{images/dow-socio.png}
+% \end{frame}
+
 % \begin{frame}{Treatment vs Control Group Baselines}
 %   $$
 %   \begin{aligned}
@@ -350,7 +388,6 @@
 %     \end{itemize}
 %   \end{itemize}
 % \end{frame}
-
 
 % \begin{frame}{The Fundamental Problem of Causal Inference (FPCI)}
 %   \begin{itemize}
@@ -380,7 +417,6 @@
 %       \end{itemize}
 %   \end{itemize}
 % \end{frame}
-
 
 % \begin{frame}{Estimate Causal Effects for Populations Rather than Units}
 %   To make things more complicated, let's make another estimator.
