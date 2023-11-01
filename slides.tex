@@ -14,55 +14,109 @@
 \begin{document}
 \maketitle
 
-\begin{frame}{Overview of the Talk}
+\begin{frame}{Hi! I'm Saba. Thank you for coming to my talk.}
+  \vspace{1cm}
+  My name is Saba. I'm a Data Engineer at Point72. Today, I'll be walking you through part of my master's thesis that I worked on and defended two years ago at MIT.
+  \newline
+  \newline
+  \includegraphics[width=0.2\textwidth]{images/saba-nejad.png}
+\end{frame}
+
+\begin{frame}{Goals for this talk}
+  % If you walk away with anything today, I want it to be the following two points.
   \begin{itemize}
-  \item<+-> Introduce the Problem Space; Define Terminology
-  \item<+-> Introduce the Trial and the Dataset
-  \item<+-> Mathematical Model
-  \item<+-> Data Prep, Cleaning, Processing
-  \item<+-> Results, Takeaways, Conclusion
+  \item<+-> Before starting to analyze your data, you should know details about your data:
+    \begin{itemize}
+      \item how it was collected
+      \item its biases
+      \item dimenstionality, fill-rate, etc.
+    \end{itemize}
+  \item<+-> Before trying to fit a model to your data, you should have a mathematical model rooted in the real world.
   \end{itemize}
 \end{frame}
 
-\section{The Background}
-
-\begin{frame}{The Power Grid}
+\begin{frame}{What are we going to talk about?}
+  To that end, I'll be talking about,
+  % I will walk you through a specific data modeling problem on a specific dataset, the techniques I used and found helpful and I hope you'll find them helpful too.
   \begin{itemize}
-    \item<+-> Electricity is unique in that its \textbf{storage is prohibitively costly} $\implies$ \textbf{supply must at least meet demand} at all times. 
-    \item<+-> \textbf{System Operators}: Resposible for reliable delivery of electricity to consumers.
-    \vspace{0.2cm}
-    \begin{center}
-      \includegraphics[width=0.65\textwidth]{images/iso-control-room.png}
-    \end{center}
+    \item<+-> the data from a trial in London that implemented a particular pricing model on a subset of houses to quantify the impact of pricing on electricity consumption.
+    \item<+-> the steps I took to understand this data, and methods I used to prep, clean, and process the data.
+    \item<+-> the thinking behind the mathematical framing of the problem.
+    \item<+-> the analysis based on the particular dataset and mathematical model.
+    \item<+-> results, takeaways, lessons learned.
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Demand Response}
-  (Dynamic) Time of Use Pricing (dToU):
+% \begin{frame}{Overview of the Talk}
+%   \begin{itemize}
+%   \item<+-> Introduce the Problem Space; Define Terminology
+%   \item<+-> Introduce the Trial and the Dataset
+%   \item<+-> Mathematical Model
+%   \item<+-> Data Prep, Cleaning, Processing
+%   \item<+-> Results, Takeaways, Conclusion
+%   \end{itemize}
+% \end{frame}
+
+\section{Useful Details about the Problem Space}
+% Here, we will walk through the specifc details within electricity pricing that will help with understanding the general problem
+
+\begin{frame}{In electicity, there is a supply and demand constaint.}
+  \begin{itemize}
+    \item<+-> Electricity is unique in that its \textbf{storage is prohibitively costly}.
+    \item<+-> As a result, \textbf{supply must meet demand} at all times. 
+    \item<+-> If demand exceeds supply, there will be a power outage. 
+    \item<+-> Power outages are extremely costly and we try to prevent them as much as possible.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Demand Response is a tool that helps lower demand.}
+  \begin{itemize}
+    \item<+-> This unique feature of electricity, poses a \textbf{challenge}. 
+    \item<+-> Imagine an unpredictably hot day where there is more demand than expected.
+    \item<+-> To prevent a power outage, we need close to real-time methods to lower demand.
+    \item<+-> \textbf{Demand Response} is one such method.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Demand Response visual example}
+  \centering
+  \includegraphics[width=0.85\textwidth]{images/demand-response.png}
+\end{frame}
+
+\begin{frame}{Demand Response is a tragedy of the commons issue.}
+  \centering
+  \includegraphics[width=0.8\textwidth]{images/OES-power-text.png}
+\end{frame}
+
+\begin{frame}{Demand Response also uses pricing models.}
   \begin{itemize}
     \item<+-> Assumption 1: Demand can be shifted around.
-    \item<+-> Assumption 2: Consumers are price sensitive i.e. there's correlation between demand and price. Causation?
-    \item[]<+->
-    \vspace{0.2cm}
-    \centering
-    \includegraphics[width=0.85\textwidth]{images/demand-response.png}
+    \item<+-> Assumption 2: Consumers are price sensitive i.e. they will respond to price incentives.
+    \item<+-> Two pricing models:
+    \begin{itemize}
+      \item<+-> Time of Use Pricing
+      \item<+-> Dynamic Time of Use Pricing
+    \end{itemize}
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Causal Inference}
-  % TODO: What is causal inference and treatment effect in laymen terms; what is a treatment.
-  % rethink ordering of the next few slides
-    \centering
-    \includegraphics[width=0.7\textwidth]{images/headache-treatment-effect.png}
+\begin{frame}{Repeat}
+  There is a pricing model, called \textbf{Dynamic Time of Use Pricing}, that uses price incentives to lower demand on the grid and prevent a power outage.
 \end{frame}
 
-\begin{frame}{Other Challenges with Causal Inference}
+% implicit in this pricing model is that there's correlation between demand and price. the idea is that we will respond to the incentive because
+% we're price sensitive beings. but the question is can the pricing model *cause* us to lower our consumption. in the next section, we'll walk through 
+% some mathematical tools to investigate and qualify the causal link between the pricing model and consumption.
+
+\begin{frame}{Understanding causality and some useful terminology}
   \begin{itemize}
-    \item<+-> It's difficult to estimate the treatment effect for a unit. \\
-    \indent $\implies$ analyses are done on a \textbf{population vs a unit}.
-    \item<+-> When estimating treatment effect for populations, to remove bias terms, we want samples that behave similarly out of sample. \\
-    \indent $\implies$ analyses are done on \textbf{random samples} of populations.
+    \item<+-> What does it mean for something to have a causal effect on something else
+    \item<+-> What is a treatment
+    % need not be an actual treamment, the thing or intervention whose impact we are trying to study
+    \item<+-> What is the counterfactual
   \end{itemize}
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/headache-treatment-effect.png}
 \end{frame}
 
 \begin{frame}{The Fundamental Problem of Causal Inference (FPCI)}
@@ -75,14 +129,27 @@
       \item $T = Y_1 - Y_0$ := the treatment effect
     \end{itemize}
     \item<+-> $Y_0$ and $Y_1$ are \textbf{counterfactuals} of one another. We observe \textbf{only} $Y_1$ or $Y_0$, but not both at the same time.
+    % the reason counterfactuals are estimated are SO WE CAN ESIMATE THE TREATMENT EFFECT
   \end{itemize}
 \end{frame}
 
 \begin{frame}{Solutions Around FPCI}
   \begin{enumerate}
     \item<+-> Temporal Stability \& Causal Transience
+    % \begin{enumerate}
+    %   \item<+-> the causal effect of $X$ on $Y$ is the same at every point in time
+    %   \item<+-> and the causal effect of $X$ on $Y$ is reversible (so having once been exposed $X$ doesn't permanently change the effect of $X$ on $Y$)
+    %   \item<+-> applies in lab settings, water molecules, for example. doesn't apply to humans
+    % \end{enumerate}
     \item<+-> Unit Homogeneity
-    \item<+-> Estimate causal effects for populations rather than units 
+    % \begin{enumerate}
+    %   \item<+-> response variables are identical for all units
+    %   \item<+-> applies in lab settings, water molecules, for example. doesn't apply to humans
+    % \end{enumerate}
+    \item<+-> Estimate causal effects for populations rather than units
+    % \begin{enumerate}
+    %   \item<+-> applies to populations of humans, and this problem!
+    % \end{enumerate}
   \end{enumerate}
 \end{frame}
 
@@ -94,7 +161,18 @@
   \end{enumerate}
 \end{frame}
 
-\section{The Data}
+\begin{frame}{Random samples of populations are studied to estimate treatment effects.}
+  \begin{itemize}
+    \item<+-> It's difficult to estimate the treatment effect for a unit. \\
+    \indent $\implies$ analyses are done on a \textbf{population vs a unit}.
+    \item<+-> When estimating treatment effect for populations, to remove bias terms, we want samples that behave similarly out of sample. \\
+    \indent $\implies$ analyses are done on \textbf{random samples} of populations.
+  \end{itemize}
+\end{frame}
+
+\section{The Details of the Trial Studied}
+% now we have some mathematical tools in our toolbox to study causality and estimate treatment effects.we know a bit about the 
+% pricing model in this trial. now let's go learn more about the trial and the data
 
 \begin{frame}{Low Carbon London Smart Meter Trial}
   \begin{itemize}
@@ -128,7 +206,35 @@
 \end{frame}
 
 \begin{frame}{Additional Features: Discrete Socio-Economic Categories}
-  discrete socio-economic feature per household included in the data
+  % discrete socio-economic feature per household included in the data
+  % \begin{figure}
+  %   \centering
+  %   \subfloat{\includegraphics[width=5cm]{images/acorn-group-levels.png}}
+  %   \qquad
+  %   \subfloat{\includegraphics[width=5cm]{images/acorn-groups.png}}
+  % \end{figure}
+  % \begin{figure}[] 
+  %   \centering
+  %   \subfloat[]{
+  %       \includegraphics[width=0.4\textwidth]{images/acorn-group-levels.png}
+  %       }
+  %   \hfill
+  %   \subfloat[data b]{
+  %       \includegraphics[width=0.4\textwidth]{images/acorn-groups.png}
+  %       }
+  % \end{figure}
+\end{frame}
+
+\begin{frame}{Additional Features: Discrete Socio-Economic Categories}
+  \includegraphics[width=1\textwidth]{images/acorn-groups.png}
+\end{frame}
+
+\begin{frame}{Additional Features: Discrete Socio-Economic Categories}
+  \includegraphics[width=1\textwidth]{images/acorn-group-levels.png}
+\end{frame}
+
+\begin{frame}{Additional Features: Discrete Socio-Economic Categories}
+  \includegraphics[width=1.2\textwidth]{images/acorn-group-category-house-count.png}
 \end{frame}
 
 \begin{frame}{Low Carbon London Smart Meter Trial: Biases?}
@@ -176,7 +282,7 @@
     \begin{itemize}
       \item<+-> price sensitive group opted in
       \item<+-> low consuming group opted in
-      \item<+-> those households are flexible time-wise: particular jobs, hours, etc.
+      \item<+-> those households are flexible time-wise: particular jobs, hours, etc.\
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -202,7 +308,7 @@
   $$
   \begin{itemize}
   \item[]<+-> $\alpha$ matrics are of size $\alpha_{t \times n_c}$.
-  \item[]<+-> $t$ is the number of half-hour measurements in a year ($t = 365 \times 48 = 17520$ for 2012 and 2013).
+  \item[]<+-> $t$ is the number of half-hour measurements in a year ($t = 365 \times 48 = 17,520$ for 2012 and 2013).
   \item[]<+-> $n_c$ is the number of households in the control group. 
   \end{itemize}
 \end{frame}
@@ -218,7 +324,7 @@
   $$
   \begin{itemize}
   \item[]<+-> $\beta$ matrics are of size $\alpha_{t \times n_t}$.
-  \item[]<+-> $t$ is the number of half-hour measurements in a year ($t = 365 \times 48 = 17520$ for 2012 and 2013).
+  \item[]<+-> $t$ is the number of half-hour measurements in a year ($t = 365 \times 48 = 17,520$ for 2012 and 2013).
   \item[]<+-> $n_t$ is the number of households in the treatment group. 
   \end{itemize}
 \end{frame}
@@ -304,7 +410,19 @@
   \includegraphics[width=0.95\textwidth]{images/lcl-raw-files.png}
 \end{frame}
 
-\begin{frame}{Treatment Effective?}
+\begin{frame}{Data Prep, Cleaning, Processing}
+  \begin{enumerate}
+    \item<+-> first set of files, segmented by year, contain the \texttt{house\_id} (str), \texttt{treated} (bool), \texttt{date\_time} (datetime), \texttt{KWH/hh} (float).
+    \item<+-> second contains \texttt{house\_id} (str), \texttt{acorn} (str), \texttt{acorn\_group} (str).
+    \item<+-> third is the tarrif file contains \texttt{date\_time} (datetime), price per designation for that hh (float).
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}{Data Prep, Cleaning, Processing}
+  \includegraphics[width=0.95\textwidth]{images/lcl-clean-files.png}
+\end{frame}
+
+\begin{frame}{}
   If we look at percent change without normalizing the baselines the treatment was effective.
 \end{frame}
 
@@ -350,7 +468,7 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Thank You}
+\begin{frame}{Thank You! Questions?}
   \begin{itemize}
   \item \url{https://github.com/sabanejad}
   \item \url{https://www.linkedin.com/in/sabanejad/}
@@ -358,6 +476,14 @@
 \end{frame}
 
 % \section{Appendix}
+
+% \begin{frame}{Who are System Operators?}
+%   \item<+-> \textbf{System Operators}: Resposible for reliable delivery of electricity to consumers.
+%   \vspace{0.2cm}
+%   \begin{center}
+%     \includegraphics[width=0.65\textwidth]{images/iso-control-room.png}
+%   \end{center}
+% \end{frame}
 
 % \begin{frame}{Socio DoW Analysis}
 %   \centering
