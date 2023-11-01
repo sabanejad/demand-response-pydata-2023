@@ -4,6 +4,7 @@
 \usepackage{minted}
 \usepackage{subfig}
 \usepackage{hyperref}
+\usepackage{multicol}
 
 \title{How to Use Python and Mathematical Modeling to Better Understand the Impact of Electricity Pricing on Consumption}
 
@@ -164,15 +165,18 @@
 \begin{frame}{Random samples of populations are studied to estimate treatment effects.}
   \begin{itemize}
     \item<+-> It's difficult to estimate the treatment effect for a unit. \\
-    \indent $\implies$ analyses are done on a \textbf{population vs a unit}.
-    \item<+-> When estimating treatment effect for populations, to remove bias terms, we want samples that behave similarly out of sample. \\
+    \indent $\implies$ analyses are done on a \textbf{population vs a unit}. The \textbf{larger the population}, the easier to robustly estimate treatment effects.
+    \item<+-> When estimating treatment effect for populations, to remove bias terms, we want groups that behave similarly out of sample. \\
     \indent $\implies$ analyses are done on \textbf{random samples} of populations.
   \end{itemize}
 \end{frame}
 
+\begin{frame}{What have we learned and where are we headed?}
+  now we have some mathematical tools in our toolbox to study causality and estimate treatment effects.we know a bit about the 
+  pricing model in this trial. now let's go learn more about the trial and the data
+\end{frame}
+
 \section{The Details of the Trial Studied}
-% now we have some mathematical tools in our toolbox to study causality and estimate treatment effects.we know a bit about the 
-% pricing model in this trial. now let's go learn more about the trial and the data
 
 \begin{frame}{Low Carbon London Smart Meter Trial}
   \begin{itemize}
@@ -205,35 +209,37 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Additional Features: Discrete Socio-Economic Categories}
-  % discrete socio-economic feature per household included in the data
-  % \begin{figure}
-  %   \centering
-  %   \subfloat{\includegraphics[width=5cm]{images/acorn-group-levels.png}}
-  %   \qquad
-  %   \subfloat{\includegraphics[width=5cm]{images/acorn-groups.png}}
-  % \end{figure}
-  % \begin{figure}[] 
-  %   \centering
-  %   \subfloat[]{
-  %       \includegraphics[width=0.4\textwidth]{images/acorn-group-levels.png}
-  %       }
-  %   \hfill
-  %   \subfloat[data b]{
-  %       \includegraphics[width=0.4\textwidth]{images/acorn-groups.png}
-  %       }
-  % \end{figure}
-\end{frame}
+% \begin{frame}{Additional Features: Discrete Socio-Economic Categories}
+%   % discrete socio-economic feature per household included in the data
+%   % \begin{figure}
+%   %   \centering
+%   %   \subfloat{\includegraphics[width=5cm]{images/acorn-group-levels.png}}
+%   %   \qquad
+%   %   \subfloat{\includegraphics[width=5cm]{images/acorn-groups.png}}
+%   % \end{figure}
+%   % \begin{figure}[] 
+%   %   \centering
+%   %   \subfloat[]{
+%   %       \includegraphics[width=0.4\textwidth]{images/acorn-group-levels.png}
+%   %       }
+%   %   \hfill
+%   %   \subfloat[data b]{
+%   %       \includegraphics[width=0.4\textwidth]{images/acorn-groups.png}
+%   %       }
+%   % \end{figure}
+% \end{frame}
 
 \begin{frame}{Additional Features: Discrete Socio-Economic Categories}
-  \includegraphics[width=1\textwidth]{images/acorn-groups.png}
+  \centering
+  \includegraphics[width=0.65\textwidth]{images/acorn-groups.png}
 \end{frame}
 
-\begin{frame}{Additional Features: Discrete Socio-Economic Categories}
-  \includegraphics[width=1\textwidth]{images/acorn-group-levels.png}
-\end{frame}
+% \begin{frame}{Additional Features: Discrete Socio-Economic Categories}
+%   \includegraphics[width=1\textwidth]{images/acorn-group-levels.png}
+% \end{frame}
 
-\begin{frame}{Additional Features: Discrete Socio-Economic Categories}
+\begin{frame}{Additional Features: Two Levels of Discrete Socio-Economic Categories}
+  \centering
   \includegraphics[width=1.2\textwidth]{images/acorn-group-category-house-count.png}
 \end{frame}
 
@@ -256,12 +262,19 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Low Carbon London Smart Meter Trial: Distribution?}
+\begin{frame}{The two groups were not biased geographically}
   \begin{figure}
     \centering
-    \subfloat[\centering Trial household sample locations overlaid on the borough boundary map of Greater London. This shows that the treatment and control group were representative samples of Greater London.]{\includegraphics[width=5cm]{images/london-geo-breakdown.png}}
-    \qquad
-    \subfloat[\centering The treatment and control groups were also representative socio-economic samples of Greater London.]{\includegraphics[width=5cm]{images/london-socio-breakdown.png}}
+      \includegraphics[width=0.75\textwidth]{images/london-geo-breakdown.png}
+      \caption{Trial household sample locations overlaid on the borough boundary map of Greater London. This shows that the treatment and control group were representative samples of Greater London.}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{The two groups were not biased socio-economically}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.85\textwidth]{images/london-socio-breakdown.png}
+    \caption{The treatment and control groups were also representative socio-economic samples of Greater London.}
   \end{figure}
 \end{frame}
 
@@ -297,7 +310,8 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Dimenstionality Analysis: Control Group Matrices}
+\begin{frame}{Dimenstionality Analysis: Treatment \& Control Group Matrices}
+  \begin{multicols}{2}
   $$
   \alpha_y = \left[\begin{array}{cccc}
   a_{11} & a_{12} & \cdots & a_{1 n_c} \\
@@ -306,14 +320,7 @@
   a_{t 1} & a_{t 2} & \cdots & a_{t n_c}
   \end{array}\right]
   $$
-  \begin{itemize}
-  \item[]<+-> $\alpha$ matrics are of size $\alpha_{t \times n_c}$.
-  \item[]<+-> $t$ is the number of half-hour measurements in a year ($t = 365 \times 48 = 17,520$ for 2012 and 2013).
-  \item[]<+-> $n_c$ is the number of households in the control group. 
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Dimenstionality Analysis: Treatment Group Matrices}
+  \break
   $$
   \beta_y = \left[\begin{array}{cccc}
   b_{11} & b_{12} & \cdots & b_{1 n_t} \\
@@ -322,27 +329,28 @@
   b_{t 1} & b_{t 2} & \cdots & b_{t n_t}
   \end{array}\right]
   $$
+  \end{multicols}
   \begin{itemize}
-  \item[]<+-> $\beta$ matrics are of size $\alpha_{t \times n_t}$.
+  \item[]<+-> $\alpha$ matrics are of size $\alpha_{t \times n_c}$; $\beta$ matrics are of size $\beta_{t \times n_t}$.
   \item[]<+-> $t$ is the number of half-hour measurements in a year ($t = 365 \times 48 = 17,520$ for 2012 and 2013).
-  \item[]<+-> $n_t$ is the number of households in the treatment group. 
+  \item[]<+-> $n_c$ is the number of households in the control group; $n_t$ is the number of households in the treatment group. 
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Mathematical Model}
-  \begin{table}[h!]
-  \centering
-    \begin{tabular}{|p{3cm}|p{3.5cm}|p{3.5cm}|}
-        \hline
-        Year & Control Group & Treatment Group \\
-        \hline
-        2011 & $\alpha_{2011}$ & $\beta_{2011}$ \\
-        2012 & $\alpha_{2012}$ & $\beta_{2012}$ \\
-        2013 & $\alpha_{2013}$ & $\hat\beta_{2013}$ \\
-        2014 & $\alpha_{2014}$ & $\beta_{2014}$ \\
-        \hline
-    \end{tabular}
-  \end{table}
+\begin{frame}{Our goal is to find a good estimate for the counterfactual consumption.}
+  % \begin{table}[h!]
+  % \centering
+  %   \begin{tabular}{|p{3cm}|p{3.5cm}|p{3.5cm}|}
+  %       \hline
+  %       Year & Control Group & Treatment Group \\
+  %       \hline
+  %       2011 & $\alpha_{2011}$ & $\beta_{2011}$ \\
+  %       2012 & $\alpha_{2012}$ & $\beta_{2012}$ \\
+  %       2013 & $\alpha_{2013}$ & $\hat\beta_{2013}$ \\
+  %       2014 & $\alpha_{2014}$ & $\beta_{2014}$ \\
+  %       \hline
+  %   \end{tabular}
+  % \end{table}
   \begin{itemize}
     \item[]<+-> $\hat\beta_{2013}$ is the counterfactual consumption for $\beta_{2013}$.
     \item[]<+-> $T = \hat\beta_{2013} - \beta_{2013}$ is the treatment effect.
@@ -350,7 +358,7 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Naive Model}
+\begin{frame}{Naive Model: Use Treatment Group in 2013 as Counterfactual}
   If we didn't know about all these biases, we \textit{could} use control group in 2013 as the counterfactual estimate for treatment group in 2013.
   \begin{align}
     \begin{split}
