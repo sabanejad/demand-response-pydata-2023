@@ -84,19 +84,20 @@
   \includegraphics[width=0.85\textwidth]{images/demand-response.png}
 \end{frame}
 
-\begin{frame}{Demand Response is a tragedy of the commons issue.}
+\begin{frame}{One demand response method are blast texts.}
   \centering
   \includegraphics[width=0.8\textwidth]{images/OES-power-text.png}
 \end{frame}
 
-\begin{frame}{Demand Response also uses pricing models.}
+\begin{frame}{Another demand response method is using pricing models.}
+  These pricing models \textbf{increase} price, to incentivize people to 
   \begin{itemize}
     \item<+-> Assumption 1: Demand can be shifted around.
     \item<+-> Assumption 2: Consumers are price sensitive i.e. they will respond to price incentives.
     \item<+-> Two pricing models:
     \begin{itemize}
-      \item<+-> Time of Use Pricing
-      \item<+-> Dynamic Time of Use Pricing
+      \item<+-> Time of Use Pricing (ToU)
+      \item<+-> Dynamic Time of Use Pricing (dToU)
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -111,10 +112,11 @@
 
 \begin{frame}{Understanding causality and some useful terminology}
   \begin{itemize}
-    \item<+-> What does it mean for something to have a causal effect on something else
-    \item<+-> What is a treatment
+    \item<+-> What is a treatment? What is the treatment effect?
+    \item<+-> What is a `unit' undergoing treatment?
+    \item<+-> What does it mean for something to have a causal effect on something else?
     % need not be an actual treamment, the thing or intervention whose impact we are trying to study
-    \item<+-> What is the counterfactual
+    \item<+-> What is the counterfactual?
   \end{itemize}
     \centering
     \includegraphics[width=0.5\textwidth]{images/headache-treatment-effect.png}
@@ -165,36 +167,38 @@
 \begin{frame}{Random samples of populations are studied to estimate treatment effects.}
   \begin{itemize}
     \item<+-> It's difficult to estimate the treatment effect for a unit. \\
-    \indent $\implies$ analyses are done on a \textbf{population vs a unit}. The \textbf{larger the population}, the easier to robustly estimate treatment effects.
+    \indent $\implies$ FPCI makes it \textbf{necessary} to study a \textbf{population vs a unit}. The \textbf{larger the population}, the easier to robustly estimate treatment effects.
     \item<+-> When estimating treatment effect for populations, to remove bias terms, we want groups that behave similarly out of sample. \\
     \indent $\implies$ analyses are done on \textbf{random samples} of populations.
   \end{itemize}
 \end{frame}
 
 \begin{frame}{What have we learned and where are we headed?}
+  in summary, we want large, random samples of populations to estimate effect of a treatment.
+  perhaps connecting this back to the second lesson of the talk, its important to base your analysis in some mathematical framework because it'll change what you are able to do with the data you have.
   now we have some mathematical tools in our toolbox to study causality and estimate treatment effects.we know a bit about the 
   pricing model in this trial. now let's go learn more about the trial and the data
 \end{frame}
 
 \section{The Details of the Trial Studied}
 
-\begin{frame}{Low Carbon London Smart Meter Trial}
-  \begin{itemize}
-    \item<+-> Motivation: The Climate Change Act of 2008 sets the target of reducing carbon emissions to 20\% of 1990 levels by 2050.
-    \item<+-> ``Dynamic": Prices were given a day ahead via the Smart Meter In Home Display or text message.
-    \vspace{0.3cm}
-    \begin{center}
-    \includegraphics[width=0.87\textwidth]{images/day-ahead-pricing.png}
-    \end{center}
-  \end{itemize}
+\begin{frame}{High Level Overview of the Trial}
+  \centering
+  \includegraphics[width=0.5\textwidth]{images/trial-high-level.png}
 \end{frame}
 
 \begin{frame}{Low Carbon London Smart Meter Trial}
   \begin{itemize}
-    \item<+-> Data spans November 2011 and February 2014 (around 167M records).
+    \item<+-> Motivation: The Climate Change Act of 2008 sets the target of reducing carbon emissions to 20\% of 1990 levels by 2050.
+    \item<+-> Data spans November 2011 and February 2014.
     \item<+-> Treatment took place in the calendar year 2013.
-    \item<+-> Readings were taken at half hourly intervals.
-    \item<+-> dTou price bands vs static pricing model:
+    \item<+-> Readings were taken at half hourly intervals, for the entire duration of the trial, and for 5600 houses in total (around 167M records).
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{dToU: pre-set prices, implemented at different times of day}
+  \begin{itemize}
+    \item<+-> dToU price bands vs static pricing model:
     \begin{table}[]
       \vspace{0.2cm}
       \centering
@@ -206,6 +210,16 @@
         Low (3.99 p/kWh) & 14.228 p/kWh \\ \hline
       \end{tabular}
     \end{table}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{dToU: pre-set prices, implemented at different times of day}
+  \begin{itemize}
+    \item<+-> ``Dynamic": Times of day when households would be subject to high price point was communicated a day ahead via the Smart Meter In Home Display or text message.
+    \vspace{0.3cm}
+    \begin{center}
+    \includegraphics[width=0.87\textwidth]{images/day-ahead-pricing.png}
+    \end{center}
   \end{itemize}
 \end{frame}
 
@@ -229,7 +243,7 @@
 %   % \end{figure}
 % \end{frame}
 
-\begin{frame}{Additional Features: Discrete Socio-Economic Categories}
+\begin{frame}{Features: Two Levels of Discrete Socio-Economic Categories}
   \centering
   \includegraphics[width=0.65\textwidth]{images/acorn-groups.png}
 \end{frame}
@@ -238,20 +252,20 @@
 %   \includegraphics[width=1\textwidth]{images/acorn-group-levels.png}
 % \end{frame}
 
-\begin{frame}{Additional Features: Two Levels of Discrete Socio-Economic Categories}
+\begin{frame}{Features: Two Levels of Discrete Socio-Economic Categories}
   \centering
-  \includegraphics[width=1.2\textwidth]{images/acorn-group-category-house-count.png}
+  \includegraphics[width=0.8\textwidth]{images/acorn-group-category-house-count.png}
 \end{frame}
 
-\begin{frame}{Low Carbon London Smart Meter Trial: Biases?}
+\begin{frame}{Biases I: Treatment group opted in.}
   \textbf{The trial is double opt-in}:
   \begin{enumerate}
     \item<+-> Households opt into sharing their data with the trial at all.
-    \item<+-> Some opted into the treatment group: subject to the dToU pricing model in 2013.
+    \item<+-> Some opted into undergoing dToU pricing in 2013.
   \end{enumerate}
 \end{frame}
 
-\begin{frame}{Low Carbon London Smart Meter Trial: Biases?}
+\begin{frame}{Biases II: There were cash incentives for the treatment group.}
   The treatment group was given some incentives: 
   \begin{itemize}
     \item A guarantee that they will be reimbursed at the end of trial if they are worse off on the dToU tariff than they would have been on their previous tariff.
@@ -265,7 +279,7 @@
 \begin{frame}{The two groups were not biased geographically}
   \begin{figure}
     \centering
-      \includegraphics[width=0.75\textwidth]{images/london-geo-breakdown.png}
+      \includegraphics[width=0.7\textwidth]{images/london-geo-breakdown.png}
       \caption{Trial household sample locations overlaid on the borough boundary map of Greater London. This shows that the treatment and control group were representative samples of Greater London.}
   \end{figure}
 \end{frame}
@@ -278,7 +292,7 @@
   \end{figure}
 \end{frame}
 
-\begin{frame}{Low Carbon London Smart Meter Trial: Missing Data}
+\begin{frame}{Onboarding households creates a missing data issue.}
   \begin{itemize}
     \item 2012: Users were still onboarding.
     \item 2013: Some users dropped out of both the treatment and the control groups
@@ -300,9 +314,9 @@
   \end{itemize}
 \end{frame}
 
-\section{The Math}
+\section{Let's formulate the mathematical model that will inform our analysis.}
 
-\begin{frame}{Mathematical Model}
+\begin{frame}{Let's establish some symbology standards}
   Consider the following segmentation of the data.
   \begin{itemize}
     \item $\alpha_y$ := control group's consumption matrix during year $y$
@@ -310,7 +324,7 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Dimenstionality Analysis: Treatment \& Control Group Matrices}
+\begin{frame}{What are these matrics and what is in them?}
   \begin{multicols}{2}
   $$
   \alpha_y = \left[\begin{array}{cccc}
@@ -412,7 +426,7 @@
   \end{align}
 \end{frame}
 
-\section{The Analysis}
+\section{Now we have a model, let's use run the analysis based on the model}
 
 \begin{frame}{Data Prep, Cleaning, Processing}
   \includegraphics[width=0.95\textwidth]{images/lcl-raw-files.png}
@@ -430,30 +444,154 @@
   \includegraphics[width=0.95\textwidth]{images/lcl-clean-files.png}
 \end{frame}
 
-\begin{frame}{}
-  If we look at percent change without normalizing the baselines the treatment was effective.
-\end{frame}
-
-\begin{frame}{Other Clustering?}
-  I used different clustering methods to cluster houses in this data set based on the control group’s consumption pre-intervention: k-means clustering, PCA3, TSNE4. I also tried clustering on the frequency responses which I found fast Fourier trans- form. PCA, TSNE, and Agglomerative clustering on the resulting data set was also inconclusive. This is reason for sticking to the pre-existing socio-economic clusters.
-\end{frame}
-
-\begin{frame}
-  Assume matrix $\alpha^{t \times n_c}$ contains control group data, and $\beta^{t \times n_t}$ contains treatment group data. Where $t = 365 \times 48 = 17520$, $n_c$ is the number of households in the control group and $n_t$ is the number of households in the treatment group.
-  \begin{align}
+\begin{frame}{Our matrics are half full for 2012}
+  \begin{multicols}{2}
+    $$
+    \alpha_{2012} = \left[\begin{array}{cccc}
+    a_{11} & a_{12} & \cdots & a_{1 n_c} \\
+    a_{21} & a_{22} & \cdots & a_{2 n_c} \\
+    \vdots & \vdots & \ddots & \vdots \\
+    a_{t 1} & a_{t 2} & \cdots & a_{t n_c}
+    \end{array}\right]
+    $$
+    \break
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/unique-houses-2012.png}
+  \end{multicols}
+  \vspace{-1cm}
+  \begin{align*}
     \begin{split}
-      \overline{\beta^m_{2012}} &= a \times \overline{\alpha^m_{2012}} + b \\
-      \overline{\hat{\beta}^m_{2013}} &= a \times \overline{\alpha^m_{2013}} + b \\
-      \overline{\Delta\mbox{treatment}} &= \overline{\beta^m_{2013}} - \overline{\hat{\beta}^m_{2013}}
+        \alpha_{2012} X &= \beta_{2012} \\
+        \alpha_{2013} X &= \hat\beta_{2013} \\
+        \Delta\mbox{treatment} &= \beta_{2013} - \hat\beta_{2013}
     \end{split}
-  \end{align}
+  \end{align*}
+  Our 2012 matrics are half full.
+\end{frame}
+
+\begin{frame}{We have some paths forward}
+  \begin{itemize}
+    \item<+-> impute values
+    \begin{itemize}
+      \item<+-> {\color{green}{pro}}: you are keeping all of your data and you can capture the full trend.
+      \item<+-> how do you impute values?
+      \item<+-> are you introducing error?
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{We have some paths forward}
+  \begin{itemize}
+    \item<+-> limit the timeframe to, for example, latter half of 2012
+    \begin{itemize}
+      \item<+-> {\color{red}{con}}: can't capture annual seasonality
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{We have some paths forward}
+  \begin{itemize}
+    \item<+-> use a fixed panel: only keep the houses that have values for all of 2012
+    \begin{itemize}
+      \item<+-> {\color{red}{con}}: you are making your sample size small
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{We have some paths forward}
+  \begin{itemize}
+    \item<+-> reduce dimenstionality
+    \begin{itemize}
+      \item<+-> go from matrix of $t \times n$ to vector of size $t$.
+      \item<+-> take the mean over all houses that you have at any given $t$ to remove this issue.
+      \item<+-> {\color{red}{con}}: you are reducing dimenstionality and removing valuable datapoints that might teach you something
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{The path forward depends on your usecase.}
+  \begin{itemize}
+    \item[]<+-> There is no wrong answer here. 
+    \item[]<+-> The choice of methodology depends on the assumptions you are comfortable making.
+    \item[]<+-> It's important to make informed decisions grounded in the type of analysis and with full knowledge of your data and its shortfalls.
+  \end{itemize}
+\end{frame}
+
+% \begin{frame}{Other Clustering?}
+%   I used different clustering methods to cluster houses in this data set based on the control group’s consumption pre-intervention: k-means clustering, PCA3, TSNE4. I also tried clustering on the frequency responses which I found fast Fourier trans- form. PCA, TSNE, and Agglomerative clustering on the resulting data set was also inconclusive. This is reason for sticking to the pre-existing socio-economic clusters.
+% \end{frame}
+
+\begin{frame}{Matrices $\rightarrow$ Vectors}
+  \begin{multicols}{2}
+    $$
+    \alpha_y = \left[\begin{array}{cccc}
+    a_{11} & a_{12} & \cdots & a_{1 n_c} \\
+    a_{21} & a_{22} & \cdots & a_{2 n_c} \\
+    \vdots & \vdots & \ddots & \vdots \\
+    a_{t 1} & a_{t 2} & \cdots & a_{t n_c}
+    \end{array}\right]
+    \qquad\longrightarrow
+    $$
+    \break
+    $$
+    \overline{\alpha_y} = \left[\begin{array}{cccc}
+    \overline{a_{1}} \\
+    \overline{a_{2}} \\
+    \vdots \\
+    \overline{a_{t}}
+    \end{array}\right]
+    $$
+  \end{multicols}
+  where $\overline{a_{i}}$ = $\frac{\Sigma{a_{i, m}}}{n}$ where $a_{i, m}$ has a value and $n$ is the total number of elements with a value.
+\end{frame}
+
+\begin{frame}{Reduce dimenstionality}
+  \begin{align*}
+    \begin{split}
+      \overline{\beta_{2012}} &= a \times \overline{\alpha_{2012}} + b \\
+      \overline{\hat{\beta}_{2013}} &= a \times \overline{\alpha_{2013}} + b \\
+      \overline{\Delta\mbox{treatment}} &= \overline{\beta_{2013}} - \overline{\hat{\beta}_{2013}}
+    \end{split}
+  \end{align*}
+\end{frame}
+
+\begin{frame}{Learned linear relationship from 2012}
+  \centering
+  \includegraphics[width=1\textwidth]{images/2012-avg.png}
+\end{frame}
+
+\begin{frame}{Interpret the estimated treatment effect}
+    $$
+    \overline{T} = \left[\begin{array}{cccc}
+    \overline{t_{1}} \\
+    \overline{t_{2}} \\
+    \overline{t_{3}} \\
+    \overline{t_{4}} \\
+    \vdots \\
+    \overline{t_{i}} \\
+    \overline{t_{i+1}} \\
+    \vdots \\
+    \overline{t_{t-1}} \\
+    \overline{t_{t}}
+    \end{array}\right]
+    $$
+\end{frame}
+
+\begin{frame}{Interpret the estimated treatment effect}
+  \centering
+  \includegraphics[width=1\textwidth]{images/linear-treatment-hours.png}
+\end{frame}
+
+\begin{frame}{Results}
+  \centering
+  \includegraphics[width=1\textwidth]{images/agg-linreg-consumption2.png}
 \end{frame}
 
 \section{The Conclusion}
 
 \begin{frame}{What Did We Learn?}
   \begin{itemize}
-    \item<+-> A little bit about electricity markets?
+    \item<+-> A little bit about electricity markets.
     \item<+-> Causal analysis.
     \item<+-> How to break down your data to match the mathematical model at hand.
     \item<+-> Questions to ask before analysis:
@@ -480,6 +618,7 @@
   \begin{itemize}
   \item \url{https://github.com/sabanejad}
   \item \url{https://www.linkedin.com/in/sabanejad/}
+  \item \url{https://dspace.mit.edu/handle/1721.1/144969}
   \end{itemize}
 \end{frame}
 
