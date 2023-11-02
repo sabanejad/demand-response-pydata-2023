@@ -599,22 +599,24 @@
   \includegraphics[width=1\textwidth]{images/linear-treatment-hours.png}
 \end{frame}
 
-\begin{frame}{But where is the python?}
+\begin{frame}[fragile]{But where is the python?}
   \begin{minted}{python}
->>> treatment_effect_adversity.shape
+>>> t_adversity.shape
 (17520, 1)
->>> highs[:5]
-['2013-01-04T14:00:00', '2013-01-04T14:30:00', '2013-01-04T15:00:00', '2013-01-04T15:30:00', '2013-01-04T16:00:00']
+>>> highs[:4]
+['2013-01-04T14:00:00', '2013-01-04T14:30:00', 
+'2013-01-04T15:00:00', '2013-01-04T15:30:00', ...]
   \end{minted}
   \pause
 
   \begin{minted}{python}
->>> treatment_effect_adversity_w_dates = pd.Series(treatment_effect_adversity.reshape(-1), index=mean_over_houses_per_hh_2013_adversity.index)
+>>> t_adver_w_dates = pd.Series(t_adversity.reshape(-1), 
+  index=usage_vector_2013_adversity.index)
 2013-01-01 00:00:00   -0.231607
 2013-01-01 00:30:00   -0.212789
 2013-01-01 01:00:00   -0.215968
 2013-01-01 01:30:00   -0.206459
->>> treatment_effect_adversity_w_dates.loc[highs].mean() * 100
+>>> t_adver_w_dates.loc[highs].mean() * 100
 -12.066
   \end{minted}
 \end{frame}
