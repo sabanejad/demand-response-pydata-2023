@@ -17,46 +17,46 @@
 
 \begin{frame}{Hi! I'm Saba. Thank you for coming to my talk.}
   \vspace{1cm}
-  My name is Saba. I'm a Data Engineer at Point72. Today, I'll be walking you through part of my master's thesis that I worked on and defended two years ago at MIT.
+  My name is Saba. I'm a Data Engineer at Point72. Today, I'll be walking you through a portion of my master's thesis.
   \newline
   \newline
   \includegraphics[width=0.2\textwidth]{images/saba-nejad.png}
 \end{frame}
 
 \begin{frame}{Goals for this talk}
-  % If you walk away with anything today, I want it to be the following two points.
   \begin{itemize}
-  \item<+-> Before starting to analyze your data, you should know details about your data:
+  \item<+-> The importance of knowing your data before starting your analysis.
     \begin{itemize}
       \item how it was collected
       \item its biases
-      \item dimenstionality, fill-rate, etc.
+      \item dimensionality, fill-rate, etc.\
     \end{itemize}
-  \item<+-> Before trying to fit a model to your data, you should have a mathematical model rooted in the real world.
+  \item<+-> The importance of starting with a mathematical model or framework, rooted in the real world, before trying to fit a model to your data.
   \end{itemize}
 \end{frame}
 
 \begin{frame}{What are we going to talk about?}
-  To that end, I'll be talking about,
+  % To that end, I'll be talking about,
   % I will walk you through a specific data modeling problem on a specific dataset, the techniques I used and found helpful and I hope you'll find them helpful too.
   \begin{itemize}
-    \item<+-> the data from a trial in London that implemented a particular pricing model on a subset of houses to quantify the impact of pricing on electricity consumption.
-    \item<+-> the steps I took to understand this data, and methods I used to prep, clean, and process the data.
-    \item<+-> the thinking behind the mathematical framing of the problem.
-    \item<+-> the analysis based on the particular dataset and mathematical model.
-    \item<+-> results, takeaways, lessons learned.
+    \item<+-> a data modeling problem
+    \item<+-> the data from a trial in London that implemented a particular pricing model on a subset of houses to quantify the impact of said pricing model on electricity consumption.
+    % \item<+-> the steps I took to understand this data, and methods I used to prep, clean, and process the data.
+    % \item<+-> the thinking behind the mathematical framing of the problem.
+    % \item<+-> the analysis based on the particular dataset and mathematical model.
+    % \item<+-> results, takeaways, lessons learned.
   \end{itemize}
 \end{frame}
 
-% \begin{frame}{Overview of the Talk}
-%   \begin{itemize}
-%   \item<+-> Introduce the Problem Space; Define Terminology
-%   \item<+-> Introduce the Trial and the Dataset
-%   \item<+-> Mathematical Model
-%   \item<+-> Data Prep, Cleaning, Processing
-%   \item<+-> Results, Takeaways, Conclusion
-%   \end{itemize}
-% \end{frame}
+\begin{frame}{Overview of the Talk}
+  \begin{itemize}
+  \item<+-> Introduce the Problem Space; Define Terminology
+  \item<+-> Introduce the Trial and the Dataset
+  \item<+-> The Mathematical Model
+  \item<+-> Data Prep, Cleaning, Processing, and Analysis
+  \item<+-> Results, Conclusion, Takeaways
+  \end{itemize}
+\end{frame}
 
 \section{Useful Details about the Problem Space}
 % Here, we will walk through the specifc details within electricity pricing that will help with understanding the general problem
@@ -85,6 +85,9 @@
 \end{frame}
 
 \begin{frame}{One demand response method are blast texts.}
+  \begin{itemize}
+    \item<+-> Assumption: Demand can be shifted around.
+  \end{itemize}
   \centering
   \includegraphics[width=0.8\textwidth]{images/OES-power-text.png}
 \end{frame}
@@ -92,8 +95,7 @@
 \begin{frame}{Another demand response method is using pricing models.}
   These pricing models \textbf{increase} price, to incentivize people to 
   \begin{itemize}
-    \item<+-> Assumption 1: Demand can be shifted around.
-    \item<+-> Assumption 2: Consumers are price sensitive i.e. they will respond to price incentives.
+    \item<+-> Assumption: Consumers are price sensitive i.e. they will respond to price incentives.
     \item<+-> Two pricing models:
     \begin{itemize}
       \item<+-> Time of Use Pricing (ToU)
@@ -102,8 +104,9 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Repeat}
-  There is a pricing model, called \textbf{Dynamic Time of Use Pricing}, that uses price incentives to lower demand on the grid and prevent a power outage.
+\begin{frame}{Problem Statement}
+  Our goal is to understand if \textbf{Dynamic Time of Use Pricing} was effective in lowering consumption \textbf{in time of high demand}.
+  % There is a pricing model, called , that uses price incentives to lower demand on the grid and prevent a power outage.
 \end{frame}
 
 % implicit in this pricing model is that there's correlation between demand and price. the idea is that we will respond to the incentive because
@@ -173,12 +176,12 @@
   \end{itemize}
 \end{frame}
 
-\begin{frame}{What have we learned and where are we headed?}
-  in summary, we want large, random samples of populations to estimate effect of a treatment.
-  perhaps connecting this back to the second lesson of the talk, its important to base your analysis in some mathematical framework because it'll change what you are able to do with the data you have.
-  now we have some mathematical tools in our toolbox to study causality and estimate treatment effects.we know a bit about the 
-  pricing model in this trial. now let's go learn more about the trial and the data
-\end{frame}
+% \begin{frame}{What have we learned and where are we headed?}
+%   in summary, we want large, random samples of populations to estimate effect of a treatment.
+%   perhaps connecting this back to the second lesson of the talk, its important to base your analysis in some mathematical framework because it'll change what you are able to do with the data you have.
+%   now we have some mathematical tools in our toolbox to study causality and estimate treatment effects.we know a bit about the 
+%   pricing model in this trial. now let's go learn more about the trial and the data
+% \end{frame}
 
 \section{The Details of the Trial Studied}
 
@@ -260,7 +263,7 @@
 
 \begin{frame}{Features: Two Levels of Discrete Socio-Economic Categories}
   \centering
-  \includegraphics[width=0.8\textwidth]{images/acorn-group-category-house-count.png}
+  \includegraphics[width=0.7\textwidth]{images/acorn-group-category-house-count.png}
 \end{frame}
 
 \begin{frame}{Biases I: Treatment group opted in.}
@@ -380,13 +383,13 @@
 
 \begin{frame}{Naive Model: Use Treatment Group in 2013 as Counterfactual}
   If we didn't know about all these biases, we \textit{could} use control group in 2013 as the counterfactual estimate for treatment group in 2013.
-  \begin{align}
+  \begin{align*}
     \begin{split}
       \hat\beta_{2013} & \approx \alpha_{2013} \\
       T & = \beta_{2013} - \hat\beta_{2013} \\
         & = \beta_{2013} - \alpha_{2013}
     \end{split}
-  \end{align}
+  \end{align*}
 \end{frame}
 
 \begin{frame}{Treatment vs Control Group Baselines}
@@ -397,13 +400,13 @@
 
 \begin{frame}{Sophisticated Naive Model}
   Let's instead use treatment group in 2012 as the counterfactual estimate for treatment group in 2013.
-  \begin{align}
+  \begin{align*}
     \begin{split}
       \hat\beta_{2013} & \approx \beta_{2012} \\
       T & = \beta_{2013} - \hat\beta_{2013} \\
         & = \beta_{2013} - \beta_{2012}
     \end{split}
-  \end{align}
+  \end{align*}
 \end{frame}
 
 \begin{frame}{Changes from Time: 2012 vs 2013}
@@ -422,14 +425,14 @@
   \includegraphics[width=0.8\textwidth]{images/yoy-mapping.png}
 \end{frame}
 
-\begin{frame}{Mathematical Model: Using Group Mapping}
-  \begin{align}
+\begin{frame}{Mathematical Model Using Group Mapping}
+  \begin{align*}
     \begin{split}
         \alpha_{2012} X &= \beta_{2012} \\
         \alpha_{2013} X &= \hat\beta_{2013} \\
         \Delta\mbox{treatment} &= \beta_{2013} - \hat\beta_{2013}
     \end{split}
-  \end{align}
+  \end{align*}
 \end{frame}
 
 \section{Now we have a model, let's use run the analysis based on the model}
@@ -450,7 +453,7 @@
   \includegraphics[width=0.95\textwidth]{images/lcl-clean-files.png}
 \end{frame}
 
-\begin{frame}{Our matrics are half full for 2012}
+\begin{frame}{Our 2012 matrics are half full.}
   \begin{multicols}{2}
     $$
     \alpha_{2012} = \left[\begin{array}{cccc}
@@ -460,57 +463,55 @@
     a_{t 1} & a_{t 2} & \cdots & a_{t n_c}
     \end{array}\right]
     $$
+    \begin{align*}
+      \begin{split}
+          \alpha_{2012} X &= \beta_{2012} \\
+          \alpha_{2013} X &= \hat\beta_{2013} \\
+          \Delta\mbox{treatment} &= \beta_{2013} - \hat\beta_{2013}
+      \end{split}
+    \end{align*}
     \break
     \centering
-    \includegraphics[width=0.6\textwidth]{images/unique-houses-2012.png}
+    \includegraphics[width=0.5\textwidth]{images/unique-houses-2012.png}
   \end{multicols}
-  \vspace{-1cm}
-  \begin{align*}
-    \begin{split}
-        \alpha_{2012} X &= \beta_{2012} \\
-        \alpha_{2013} X &= \hat\beta_{2013} \\
-        \Delta\mbox{treatment} &= \beta_{2013} - \hat\beta_{2013}
-    \end{split}
-  \end{align*}
-  Our 2012 matrics are half full.
 \end{frame}
 
 \begin{frame}{We have some paths forward}
   \begin{itemize}
-    \item<+-> impute values
+    \item<+-> Impute values
     \begin{itemize}
-      \item<+-> {\color{green}{pro}}: you are keeping all of your data and you can capture the full trend.
-      \item<+-> how do you impute values?
-      \item<+-> are you introducing error?
+      \item<+-> {\color{green}{Pro}}: You are keeping all of your data and you can capture the full trend.
+      \item<+-> How do you impute values?
+      \item<+-> Are you introducing error?
     \end{itemize}
   \end{itemize}
 \end{frame}
 
 \begin{frame}{We have some paths forward}
   \begin{itemize}
-    \item<+-> limit the timeframe to, for example, latter half of 2012
+    \item<+-> Limit the timeframe to, for example, latter half of 2012
     \begin{itemize}
-      \item<+-> {\color{red}{con}}: can't capture annual seasonality
+      \item<+-> {\color{red}{Con}}: Can't capture annual seasonality.
     \end{itemize}
   \end{itemize}
 \end{frame}
 
 \begin{frame}{We have some paths forward}
   \begin{itemize}
-    \item<+-> use a fixed panel: only keep the houses that have values for all of 2012
+    \item<+-> Use a fixed panel: only keep the houses that have values for all of 2012.
     \begin{itemize}
-      \item<+-> {\color{red}{con}}: you are making your sample size small
+      \item<+-> {\color{red}{Con}}: You are making your sample size small.
     \end{itemize}
   \end{itemize}
 \end{frame}
 
 \begin{frame}{We have some paths forward}
   \begin{itemize}
-    \item<+-> reduce dimenstionality
+    \item<+-> Reduce dimensionality
     \begin{itemize}
-      \item<+-> go from matrix of $t \times n$ to vector of size $t$.
-      \item<+-> take the mean over all houses that you have at any given $t$ to remove this issue.
-      \item<+-> {\color{red}{con}}: you are reducing dimenstionality and removing valuable datapoints that might teach you something
+      \item<+-> Go from matrix of $t \times n$ to vector of size $t$.
+      \item<+-> Take the mean over all houses that you have at any given $t$ to remove this issue.
+      \item<+-> {\color{red}{Con}}: You are reducing dimensionality and removing valuable datapoints that might teach you something.
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -527,7 +528,7 @@
 %   I used different clustering methods to cluster houses in this data set based on the control group’s consumption pre-intervention: k-means clustering, PCA3, TSNE4. I also tried clustering on the frequency responses which I found fast Fourier trans- form. PCA, TSNE, and Agglomerative clustering on the resulting data set was also inconclusive. This is reason for sticking to the pre-existing socio-economic clusters.
 % \end{frame}
 
-\begin{frame}{Matrices $\rightarrow$ Vectors}
+\begin{frame}{Reducing dimensionality: Matrices $\rightarrow$ Vectors}
   \begin{multicols}{2}
     $$
     \alpha_y = \left[\begin{array}{cccc}
@@ -551,7 +552,7 @@
   where $\overline{a_{i}}$ = $\frac{\Sigma{a_{i, m}}}{n}$ where $a_{i, m}$ has a value and $n$ is the total number of elements with a value.
 \end{frame}
 
-\begin{frame}{Reduce dimenstionality}
+\begin{frame}{Aggregated Linear Regression Group Mapping Model}
   \begin{align*}
     \begin{split}
       \overline{\beta_{2012}} &= a \times \overline{\alpha_{2012}} + b \\
@@ -563,7 +564,17 @@
 
 \begin{frame}{Learned linear relationship from 2012}
   \centering
-  \includegraphics[width=1\textwidth]{images/2012-avg.png}
+  \includegraphics[width=1\textwidth]{images/lin-reg-total.png}
+\end{frame}
+
+\begin{frame}{Let's rerun the linear regression per socio-economic group}
+  \centering
+  \includegraphics[width=1\textwidth]{images/alpha-per-socio.png}
+\end{frame}
+
+\begin{frame}{Learned linear relationship per socio from 2012}
+  \centering
+  \includegraphics[width=1\textwidth]{images/lin-reg-per-socio.png}
 \end{frame}
 
 \begin{frame}{Interpret the estimated treatment effect}
@@ -588,26 +599,63 @@
   \includegraphics[width=1\textwidth]{images/linear-treatment-hours.png}
 \end{frame}
 
+% \begin{frame}{But where is the python?}
+%   \begin{minted}{python}
+% >>> treatment_effect_adversity.shape
+% (17520, 1)
+% >>> highs[:5]
+% ['2013-01-04T14:00:00', '2013-01-04T14:30:00', '2013-01-04T15:00:00', '2013-01-04T15:30:00', '2013-01-04T16:00:00']
+%   \end{minted}
+%   \pause
+
+%   \begin{minted}{python}
+% >>> treatment_effect_adversity_w_dates = pd.Series(treatment_effect_adversity.reshape(-1), index=mean_over_houses_per_hh_2013_adversity.index)
+% date_time
+% 2013-01-01 00:00:00   -0.231607
+% 2013-01-01 00:30:00   -0.212789
+% 2013-01-01 01:00:00   -0.215968
+% 2013-01-01 01:30:00   -0.206459
+% 2013-01-01 02:00:00   -0.203372
+%                          ...   
+% 2013-12-31 21:30:00   -0.146309
+% 2013-12-31 22:00:00   -0.199695
+% 2013-12-31 22:30:00   -0.190174
+% 2013-12-31 23:00:00   -0.216379
+% 2013-12-31 23:30:00   -0.196612
+% Length: 17520, dtype: float64
+% >>> treatment_effect_adversity_w_dates.loc[highs].mean() * 100
+% -12.066
+%   \end{minted}
+% \end{frame}
+
 \begin{frame}{Results}
   \centering
-  \includegraphics[width=1\textwidth]{images/agg-linreg-consumption2.png}
+  \includegraphics[width=0.7\textwidth]{images/lin-reg-per-socio-results.png}
+  \newline
+  $\implies$ The treatment was effective in lowering consumption \textbf{in times of high demand}.
 \end{frame}
 
-\section{The Conclusion}
+% \section{The Conclusion}
 
-\begin{frame}{What Did We Learn?}
-  \begin{itemize}
-    \item<+-> A little bit about electricity markets.
-    \item<+-> Causal analysis.
-    \item<+-> How to break down your data to match the mathematical model at hand.
-    \item<+-> Questions to ask before analysis:
-    \begin{itemize}
-      \item<+-> How was the data collected? 
-      \item<+-> What biases are present?
-      \item<+-> How does that impact your analysis and results?
-    \end{itemize}
-  \end{itemize}
-\end{frame}
+% \begin{frame}{The treatment was effective.}
+%   \begin{itemize}
+%     \item<+-> Let's go back to the original question: 
+%   \end{itemize}
+% \end{frame}
+
+% \begin{frame}{What Did We Learn?}
+%   \begin{itemize}
+%     \item<+-> A little bit about electricity markets.
+%     \item<+-> Causal analysis.
+%     \item<+-> How to break down your data to match the mathematical model at hand.
+%     \item<+-> Questions to ask before analysis:
+%     \begin{itemize}
+%       \item<+-> How was the data collected? 
+%       \item<+-> What biases are present?
+%       \item<+-> How does that impact your analysis and results?
+%     \end{itemize}
+%   \end{itemize}
+% \end{frame}
 
 \begin{frame}{Takeaways}
   \begin{itemize}
