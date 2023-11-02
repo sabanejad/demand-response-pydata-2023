@@ -599,34 +599,25 @@
   \includegraphics[width=1\textwidth]{images/linear-treatment-hours.png}
 \end{frame}
 
-% \begin{frame}{But where is the python?}
-%   \begin{minted}{python}
-% >>> treatment_effect_adversity.shape
-% (17520, 1)
-% >>> highs[:5]
-% ['2013-01-04T14:00:00', '2013-01-04T14:30:00', '2013-01-04T15:00:00', '2013-01-04T15:30:00', '2013-01-04T16:00:00']
-%   \end{minted}
-%   \pause
+\begin{frame}{But where is the python?}
+  \begin{minted}{python}
+>>> treatment_effect_adversity.shape
+(17520, 1)
+>>> highs[:5]
+['2013-01-04T14:00:00', '2013-01-04T14:30:00', '2013-01-04T15:00:00', '2013-01-04T15:30:00', '2013-01-04T16:00:00']
+  \end{minted}
+  \pause
 
-%   \begin{minted}{python}
-% >>> treatment_effect_adversity_w_dates = pd.Series(treatment_effect_adversity.reshape(-1), index=mean_over_houses_per_hh_2013_adversity.index)
-% date_time
-% 2013-01-01 00:00:00   -0.231607
-% 2013-01-01 00:30:00   -0.212789
-% 2013-01-01 01:00:00   -0.215968
-% 2013-01-01 01:30:00   -0.206459
-% 2013-01-01 02:00:00   -0.203372
-%                          ...   
-% 2013-12-31 21:30:00   -0.146309
-% 2013-12-31 22:00:00   -0.199695
-% 2013-12-31 22:30:00   -0.190174
-% 2013-12-31 23:00:00   -0.216379
-% 2013-12-31 23:30:00   -0.196612
-% Length: 17520, dtype: float64
-% >>> treatment_effect_adversity_w_dates.loc[highs].mean() * 100
-% -12.066
-%   \end{minted}
-% \end{frame}
+  \begin{minted}{python}
+>>> treatment_effect_adversity_w_dates = pd.Series(treatment_effect_adversity.reshape(-1), index=mean_over_houses_per_hh_2013_adversity.index)
+2013-01-01 00:00:00   -0.231607
+2013-01-01 00:30:00   -0.212789
+2013-01-01 01:00:00   -0.215968
+2013-01-01 01:30:00   -0.206459
+>>> treatment_effect_adversity_w_dates.loc[highs].mean() * 100
+-12.066
+  \end{minted}
+\end{frame}
 
 \begin{frame}{Results}
   \centering
